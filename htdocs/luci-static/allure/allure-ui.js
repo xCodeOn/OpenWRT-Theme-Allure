@@ -4,7 +4,7 @@
   var key = 'allure:appearance';
   var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
   function getMode() {
-    try { return localStorage.getItem(key) || 'auto'; } catch(e) { return 'auto'; }
+    try { return localStorage.getItem(key) || document.documentElement.dataset.allureMode || 'auto'; } catch(e) { return document.documentElement.dataset.allureMode || 'auto'; }
   }
   function apply(mode) {
     var dark = mode === 'dark' || (mode === 'auto' && media && media.matches);

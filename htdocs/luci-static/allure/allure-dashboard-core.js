@@ -56,11 +56,13 @@ const html = `
 </div>`;
 function t(s) { return global.AllureI18n ? global.AllureI18n.t(s) : s; }
 function put(root,id,val) {const n=root.querySelector('#'+id);if(n)n.textContent=val;}
-function formatBytes(n) {if(!Number.isFinite(n)||n<0)return '—';const units=['B','KB','MB','GB','TB'];let i=0;while(n>=1024&&i<units.length-1){n/=1024;i++;}return n.toFixed(n>=100?0:n>=10?1:2)+' '+units[i];}
-function speed(n) {if(!Number.isFinite(n))return '—';const bps=n*8;if(bps>=1e9)return (bps/1e9).toFixed(2)+' Gbps';if(bps>=1e6)return (bps/1e6).toFixed(2)+' Mbps';if(bps>=1e3)return (bps/1e3).toFixed(1)+' Kbps';return bps.toFixed(0)+' bps';}
+function isRu(){return global.AllureI18n?.lang==='ru';}
+function localNumber(n, digits){return Number(n).toLocaleString(isRu()?'ru-RU':'en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits,useGrouping:false});}
+function formatBytes(n) {if(!Number.isFinite(n)||n<0)return '—';const units=isRu()?['Б','КБ','МБ','ГБ','ТБ']:['B','KB','MB','GB','TB'];let i=0;while(n>=1024&&i<units.length-1){n/=1024;i++;}return localNumber(n,n>=100?0:n>=10?1:2)+' '+units[i];}
+function speed(n) {if(!Number.isFinite(n))return '—';const bps=n*8;const units=isRu()?['бит/с','Кбит/с','Мбит/с','Гбит/с']:['bps','Kbps','Mbps','Gbps'];if(bps>=1e9)return localNumber(bps/1e9,2)+' '+units[3];if(bps>=1e6)return localNumber(bps/1e6,2)+' '+units[2];if(bps>=1e3)return localNumber(bps/1e3,1)+' '+units[1];return localNumber(bps,0)+' '+units[0];}
 function speedCard(n) {const s=speed(n).split(' ');return s[0]+' <small>'+s[1]+'</small>';}
 function valueHTML(root,id,htmlValue){const el=root.querySelector('#'+id);if(el)el.innerHTML=htmlValue;}
-function uptime(seconds){if(!Number.isFinite(seconds))return '—';let d=Math.floor(seconds/86400),h=Math.floor(seconds%86400/3600),m=Math.floor(seconds%3600/60);return d?d+'d '+h+'h':h?h+'h '+m+'m':m+'m';}
+function uptime(seconds){if(!Number.isFinite(seconds))return '—';let d=Math.floor(seconds/86400),h=Math.floor(seconds%86400/3600),m=Math.floor(seconds%3600/60);let u=isRu()?[' д',' ч',' мин']:['d','h','m'];return d?d+u[0]+' '+h+u[1]:h?h+u[1]+' '+m+u[2]:m+u[2];}
 function ring(root,id,percent,color){const el=root.querySelector('#'+id);if(!el)return;percent=Math.min(100,Math.max(0,Number(percent)||0));el.style.background='conic-gradient('+color+' '+percent+'%,var(--v-surface) '+percent+'%)';}
 function interpolate(data){const nums=data.slice(-90).map(v=>Math.max(0,Number(v)||0));while(nums.length<90)nums.unshift(0);return nums;}
 function plotLine(data,max){const nums=interpolate(data), xstep=720/(nums.length-1);let d='';nums.forEach((y,i)=>{const x=i*xstep,yy=210-(y/max)*177;d+=(i?'L':'M')+x.toFixed(1)+' '+yy.toFixed(1)+' ';});return d;}
@@ -96,14 +98,14 @@ function thermals(root,report) {
     src.textContent=t(s.source==='hwmon'?'Hardware monitor':'Kernel thermal zone');
     content.append(name,src);
     const val=document.createElement('div');val.className='allure-thermo-value';
-    val.textContent=Number(s.celsius).toFixed(1)+' °C';
+    val.textContent=localNumber(Number(s.celsius),1)+' °C';
     row.append(icon,content,val);host.appendChild(row);
   });
 }
 function mount(root,urlBuilder){root.innerHTML=html;const date=root.querySelector('#v-today');if(date)date.textContent='· '+new Date().toLocaleDateString(global.AllureI18n?.lang==='ru'?'ru-RU':'en-US',{month:'long',day:'numeric',year:'numeric'});root.querySelectorAll('[data-allure-link]').forEach(a=>{const path=a.dataset.allureLink.split('/');a.href=urlBuilder?urlBuilder(path):'/cgi-bin/luci/'+path.join('/');});if(global.AllureI18n)global.AllureI18n.translate(root);return root;}
 function update(root,data){if(!root)return;const x=data||{};if(x.board){put(root,'v-model',x.board.model||'—');put(root,'v-firmware',x.board.release?.version||x.board.release?.description||'—');}
 if(x.wan){put(root,'v-wan-state',t(x.wan.up?'Connected':'Disconnected'));const status=root.querySelector('#v-wan-state');status.classList.toggle('allure-unstable',!x.wan.up);put(root,'v-wan-ip',x.wan.ip||'—');put(root,'v-wan-name',x.wan.device||'—');put(root,'v-device',x.wan.device||t('No WAN device detected'));}
-if(x.system){const info=x.system,mem=info.memory||{};const total=Number(mem.total)||0,free=Number(mem.available??((mem.free||0)+(mem.cached||0)+(mem.buffered||0)))||0;const pct=total?Math.max(0,Math.min(100,Math.round((total-free)/total*100))):null;if(pct!=null){valueHTML(root,'v-memory',pct+' <small>%</small>');put(root,'v-memory-pct',pct+'%');put(root,'v-memory-amount',formatBytes(total-free));ring(root,'v-memory-ring',pct,'var(--v-accent)');}put(root,'v-uptime',uptime(Number(info.uptime)));if(info.load?.length){const load1=Number(info.load[0])/65535;put(root,'v-load',load1.toFixed(2));put(root,'v-load-pct',load1.toFixed(2));ring(root,'v-load-ring',Math.min(100,load1/2*100),'var(--v-cyan)');}} 
+if(x.system){const info=x.system,mem=info.memory||{};const total=Number(mem.total)||0,free=Number(mem.available??((mem.free||0)+(mem.cached||0)+(mem.buffered||0)))||0;const pct=total?Math.max(0,Math.min(100,Math.round((total-free)/total*100))):null;if(pct!=null){valueHTML(root,'v-memory',pct+' <small>%</small>');put(root,'v-memory-pct',pct+'%');put(root,'v-memory-amount',formatBytes(total-free));ring(root,'v-memory-ring',pct,'var(--v-accent)');}put(root,'v-uptime',uptime(Number(info.uptime)));if(info.load?.length){const load1=Number(info.load[0])/65535;put(root,'v-load',localNumber(load1,2));put(root,'v-load-pct',localNumber(load1,2));ring(root,'v-load-ring',Math.min(100,load1/2*100),'var(--v-cyan)');}} 
 if(x.rx!=null){valueHTML(root,'v-download',speedCard(x.rx));put(root,'v-rx',speed(x.rx));}if(x.tx!=null){valueHTML(root,'v-upload',speedCard(x.tx));put(root,'v-tx',speed(x.tx));}
 if(x.rxBytes!=null&&x.txBytes!=null)put(root,'v-traffic-total',formatBytes(x.rxBytes+x.txBytes));
 if(x.downloads&&x.uploads){plot(root,x.downloads,x.uploads);put(root,'v-chart-note',t('Live samples · speeds are measured, not a speed test.'));}

@@ -39,7 +39,8 @@ const ICONS = {
   route:'<circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M9 18h5a4 4 0 0 0 0-8h-4a4 4 0 0 1 0-8"/>',
   power:'<path d="M12 2v10M6 5a9 9 0 1 0 12 0"/>',
   layers:'<path d="m12 2 9 6-9 6-9-6 9-6ZM3 12l9 6 9-6M3 16l9 6 9-6"/>',
-  radio:'<circle cx="12" cy="12" r="2"/><path d="M7 7a7 7 0 0 0 0 10M17 7a7 7 0 0 1 0 10M4 4a11 11 0 0 0 0 16M20 4a11 11 0 0 1 0 16"/>'
+  radio:'<circle cx="12" cy="12" r="2"/><path d="M7 7a7 7 0 0 0 0 10M17 7a7 7 0 0 1 0 10M4 4a11 11 0 0 0 0 16M20 4a11 11 0 0 1 0 16"/>',
+  chevron:'<path d="m6 9 6 6 6-6"/>'
 };
 const routes = {
   status:'activity',system:'settings',network:'network',services:'box',vpn:'shield',nas:'harddrive',
@@ -134,7 +135,8 @@ return baseclass.extend({
       if(nested.length){
         const subs=E('div',{'class':'allure-nav-subitems'});
         const hasSelectedChild=activeUnder(route,current);
-        const expander=E('button',{'type':'button','class':'allure-nav-expander','aria-label':translated('Show section'),'aria-expanded':hasSelectedChild?'true':'false'},['⌄']);
+        holder.classList.add('has-submenu');
+        const expander=E('button',{'type':'button','class':'allure-nav-expander','aria-label':translated('Show section'),'aria-expanded':hasSelectedChild?'true':'false'},[svgFor('chevron')]);
         const setSubOpen=(on)=>{subs.hidden=!on;expander.setAttribute('aria-expanded',String(on));holder.classList.toggle('sub-open',on);};
         expander.addEventListener('click',()=>setSubOpen(subs.hidden));
         link.after(expander);
@@ -151,7 +153,7 @@ return baseclass.extend({
       const header=E('button',{'type':'button','class':'allure-nav-heading','aria-controls':id,'aria-expanded':'false'},[
         E('span',{'class':'allure-heading-icon'},[svgFor(iconKey(section))]),
         E('span',{'class':'allure-heading-label'},[translated(section.title)]),
-        E('span',{'class':'allure-heading-chevron'},['⌄'])
+        E('span',{'class':'allure-heading-chevron'},[svgFor('chevron')])
       ]);
       const body=E('div',{'id':id,'class':'allure-nav-children'});
       const children=ui.menu.getChildren(section);

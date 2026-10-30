@@ -1,4 +1,17 @@
-## Allure v1.3 additions
+# What's new in Allure 1.4
+
+## Fixed in 1.5.1 — vertically centered sidebar arrows
+
+The chevrons on section headings and nested sidebar entries now align vertically to their own rows, including when labels wrap or submenu content is expanded. Update with `sh install.sh`, then hard-refresh (`Cmd+Shift+R` / `Ctrl+Shift+R`).
+
+The scenic login shown in the design reference is now animated and functional: slow backdrop movement, drifting aurora, subtle star twinkling and water shimmer, graceful modal entrance, and accessible dark/light/system switch. Self-contained WebP image and CSS; no external requests or video. Reduced-motion preferences are respected. Standard LuCI authentication is preserved. Open `preview/login-preview.html` to see a self-contained preview (no login action).
+
+
+## What's new in 1.5 — complete Allure UI localization
+
+All custom Allure labels on the dashboard, graphs, status panels, thermal sensors, tooltips, and login page now follow the selected LuCI language (Russian/English). Speed, storage and uptime units are localized. Third-party LuCI applications still require their own translation packages. Open `preview/preview.html?lang=ru` or `?lang=en` to compare. Refresh the browser cache after upgrading.
+
+## Allure v1.5 additions
 
 - Native LuCI `sysauth.ut` login view: centered translucent form, no sidebar/top header.
 - Dim, smooth animated aurora / star field / landscape: pure CSS, no video, no CDN, honors reduced-motion settings.

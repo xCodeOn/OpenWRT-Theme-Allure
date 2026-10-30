@@ -20,17 +20,17 @@
     })();
   </script>
   <link rel="stylesheet" href="/luci-static/bootstrap/cascade.css">
-  <link rel="stylesheet" href="{{ media }}/allure.css?v=1.3.0">
-  <link rel="stylesheet" href="{{ media }}/allure-auth.css?v=1.3.0">
+  <link rel="stylesheet" href="{{ media }}/allure.css?v=1.5.1">
+  <link rel="stylesheet" href="{{ media }}/allure-auth.css?v=1.5.1">
   <link rel="icon" href="{{ media }}/icon.svg" type="image/svg+xml">
   {% if (dispatched?.css): %}<link rel="stylesheet" href="{{ resource }}/{{ dispatched.css }}">{% endif %}
   {% if (css): %}<style>{{ css }}</style>{% endif %}
   <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
   <script src="{{ resource }}/cbi.js"></script>
-  <script src="{{ media }}/allure-i18n.js?v=1.3.0"></script>
-  <script src="{{ media }}/allure-dashboard-core.js?v=1.3.0"></script>
-  <script defer src="{{ media }}/allure-ui.js?v=1.3.0"></script>
-  <script defer src="{{ media }}/allure-tab-icons.js?v=1.3.0"></script>
+  <script src="{{ media }}/allure-i18n.js?v=1.5.1"></script>
+  <script src="{{ media }}/allure-dashboard-core.js?v=1.5.1"></script>
+  <script defer src="{{ media }}/allure-ui.js?v=1.5.1"></script>
+  <script defer src="{{ media }}/allure-tab-icons.js?v=1.5.1"></script>
 </head>
 <body class="allure lang_{{ dispatcher.lang }}" data-page="{{ entityencode(join('-', length(ctx.request_path) ? ctx.request_path : ctx.path), true) }}">
 {% if (!blank_page): %}

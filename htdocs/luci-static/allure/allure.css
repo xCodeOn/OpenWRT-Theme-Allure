@@ -93,14 +93,20 @@ body.allure button.allure-nav-heading:hover,body.allure .allure-nav-group.expand
 body.allure button.allure-nav-heading:focus-visible,body.allure button.allure-nav-expander:focus-visible{outline:2px solid var(--v-accent);outline-offset:2px}
 .allure-heading-icon,.allure-nav-link .allure-menu-symbol{width:18px;height:18px;flex:none;display:grid;place-items:center}
 .allure-heading-icon svg,.allure-menu-symbol svg{display:block;width:17px;height:17px;stroke:currentColor;flex:none}
-.allure-heading-chevron{margin-left:auto;display:inline-block;font-size:18px;color:var(--v-muted);line-height:1;transition:transform .2s ease}
+.allure-heading-chevron{margin-left:auto;width:24px;height:24px;flex:0 0 24px;display:grid;place-items:center;color:var(--v-muted);transition:transform .2s ease;transform-origin:center center}
+.allure-heading-chevron svg{display:block;width:17px;height:17px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .allure-nav-group.expanded .allure-heading-chevron{transform:rotate(180deg)}
 .allure-nav-children{padding:5px 0 7px 9px}
 .allure-nav-children[hidden],.allure-nav-subitems[hidden]{display:none!important}
 .allure-nav-entry{position:relative;min-width:0}
 .allure-nav-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-body.allure .allure-nav-entry:has(>.allure-nav-expander)>.allure-nav-link{padding-right:34px}
-body.allure button.allure-nav-expander{position:absolute;right:3px;top:5px;height:28px;width:27px;border:0;border-radius:7px;background:transparent;color:var(--v-muted);cursor:pointer;font-size:20px;line-height:1}
+/* A 2-row grid keeps an expander centered against its own link row, not
+   against the full expanded subtree or an arbitrary pixel offset. */
+body.allure .allure-nav-entry.has-submenu{display:grid;grid-template-columns:minmax(0,1fr) 34px;align-items:center}
+body.allure .allure-nav-entry.has-submenu>.allure-nav-link{grid-column:1/-1;grid-row:1;min-width:0;padding-right:40px}
+body.allure button.allure-nav-expander{grid-column:2;grid-row:1;position:relative;right:auto;top:auto;z-index:1;justify-self:center;align-self:center;display:grid;place-items:center;margin:0;padding:0;height:28px;width:28px;border:0;border-radius:7px;background:transparent;color:var(--v-muted);cursor:pointer;line-height:1}
+body.allure button.allure-nav-expander svg{display:block;width:17px;height:17px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+body.allure .allure-nav-entry.has-submenu>.allure-nav-subitems{grid-column:1/-1;grid-row:2;min-width:0}
 body.allure button.allure-nav-expander:hover{background:var(--v-accent-soft);color:var(--v-accent)}
 .allure-nav-entry.sub-open>.allure-nav-expander{transform:rotate(180deg)}
 .allure-nav-subitems{margin-left:10px;padding-left:5px;border-left:1px solid var(--v-line)}

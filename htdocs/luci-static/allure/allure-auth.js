@@ -1,30 +1,40 @@
-/* Allure login view: client-side appearance and accessibility only.
-   Credential submission is handled by LuCI's original form endpoint. */
+/* Allure login i18n & password-visibility only. The form POST stays LuCI-native. */
 (function () {
   'use strict';
   var labels = {
-    en: { product:'OpenWrt · Router Control', welcome:'Welcome back',description:'Sign in to manage your router',
-      username:'Username',password:'Password',signIn:'Sign in',secure:'Router management',
-      light:'Light',dark:'Dark',auto:'Auto',madeFor:'Made for OpenWrt',
-      showPassword:'Show password',hidePassword:'Hide password' },
-    ru: { product:'OpenWrt · Управление роутером',welcome:'С возвращением!',description:'Войдите для управления маршрутизатором',
-      username:'Имя пользователя',password:'Пароль',signIn:'Войти',secure:'Управление роутером',
-      light:'Светлая',dark:'Тёмная',auto:'Система',madeFor:'Создано для OpenWrt',
-      showPassword:'Показать пароль',hidePassword:'Скрыть пароль' }
+    ru: { product:'Роутер · OpenWrt', username:'Имя пользователя',password:'Пароль',
+      signIn:'Войти',or:'или',light:'Светлая',dark:'Тёмная',auto:'Системная',
+      showPassword:'Показать пароль', hidePassword:'Скрыть пароль',
+      themeLight:'Светлая тема',themeDark:'Тёмная тема',themeAuto:'Как в системе' },
+    en: { product:'Router · OpenWrt', username:'Username',password:'Password',
+      signIn:'Sign in',or:'or',light:'Light',dark:'Dark',auto:'System',
+      showPassword:'Show password', hidePassword:'Hide password',
+      themeLight:'Light theme',themeDark:'Dark theme',themeAuto:'Follow system' }
   };
-  var lang = (/^ru(?:-|$)/i.test(document.documentElement.lang) ? 'ru' : 'en');
-  var tr = labels[lang];
-  document.querySelectorAll('[data-auth-i18n]').forEach(function(el) { el.textContent = tr[el.dataset.authI18n] || el.textContent; });
-  var pass = document.getElementById('luci_password');
-  var toggle = document.getElementById('allure-password-toggle');
-  if (pass && toggle) {
-    var setToggle = function(shown) {
-      pass.type = shown ? 'text' : 'password';
-      toggle.setAttribute('aria-pressed', String(shown));
-      toggle.setAttribute('aria-label', shown ? tr.hidePassword : tr.showPassword);
-      toggle.title = shown ? tr.hidePassword : tr.showPassword;
+  var lang = /^ru(?:-|$)/i.test(document.documentElement.lang) ? 'ru' : 'en';
+  var tr=labels[lang];
+  var landmark=document.querySelector('.allure-auth');
+  if(landmark) landmark.setAttribute('aria-label',lang==='ru'?'Вход в панель управления роутером':'Router sign in');
+  document.querySelectorAll('[data-auth-i18n]').forEach(function(el) {
+    var v = tr[el.getAttribute('data-auth-i18n')]; if(v)el.textContent=v;
+  });
+  document.querySelectorAll('[data-auth-i18n-placeholder]').forEach(function(el) {
+    var v=tr[el.getAttribute('data-auth-i18n-placeholder')];if(v)el.setAttribute('placeholder',v);
+  });
+  ['light','dark','auto'].forEach(function(mode) {
+    var el=document.querySelector('.allure-auth-theme [data-allure-theme="'+mode+'"]');
+    if(!el)return;
+    var title=tr[mode==='auto'?'themeAuto':mode==='light'?'themeLight':'themeDark'];
+    el.title=title;el.setAttribute('aria-label',title);
+  });
+  var input=document.getElementById('luci_password'),button=document.getElementById('allure-password-toggle');
+  if(input && button){
+    var update=function(){var visible=input.type==='text';
+      var label=visible?tr.hidePassword:tr.showPassword;
+      button.setAttribute('aria-label',label);button.title=label;
+      button.setAttribute('aria-pressed',String(visible));
     };
-    toggle.addEventListener('click',function() { setToggle(pass.type === 'password'); });
-    setToggle(false);
+    button.addEventListener('click',function(){input.type=input.type==='password'?'text':'password';update();});
+    update();
   }
 })();
