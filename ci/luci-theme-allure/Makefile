@@ -12,7 +12,7 @@ define Package/luci-theme-allure
   CATEGORY:=LuCI
   SUBMENU:=Themes
   TITLE:=Allure - macOS-inspired LuCI dashboard & theme
-  URL:=https://github.com/xCodeOn/luci-theme-allure
+  URL:=https://github.com/xCodeOn/OpenWRT-Theme-Allure
   DEPENDS:=+luci-base +luci-mod-status +luci-theme-bootstrap +rpcd-mod-ucode
   PKGARCH:=all
 endef
