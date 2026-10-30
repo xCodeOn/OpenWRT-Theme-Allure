@@ -38,6 +38,7 @@ jobs:
 
       - name: Download and extract SDK
         run: |
+          cd "$HOME"
           file="${{ steps.sdk.outputs.file }}"
           url="${{ steps.sdk.outputs.url }}"
           case "$file" in
@@ -58,14 +59,14 @@ jobs:
 
       - name: Add theme to LuCI feed
         run: |
-          DEST="sdk/feeds/luci/themes/luci-theme-allure"
+          DEST="$HOME/sdk/feeds/luci/themes/luci-theme-allure"
           mkdir -p "$DEST"
           cp -r $GITHUB_WORKSPACE/* "$DEST/"
           rm -rf "$DEST/.git" "$DEST/dist" "$DEST/.github"
 
       - name: Configure and build package
-        working-directory: sdk
         run: |
+          cd "$HOME/sdk"
           ./scripts/feeds update -f
           ./scripts/feeds install -a
           make defconfig
@@ -80,8 +81,8 @@ jobs:
       - name: Collect packages
         run: |
           mkdir -p dist
-          find sdk/bin -name 'luci-theme-allure*.ipk' -exec cp {} dist/ \; 2>/dev/null || true
-          find sdk/bin -name 'luci-theme-allure*.apk' -exec cp {} dist/ \; 2>/dev/null || true
+          find "$HOME/sdk/bin" -name 'luci-theme-allure*.ipk' -exec cp {} dist/ \; 2>/dev/null || true
+          find "$HOME/sdk/bin" -name 'luci-theme-allure*.apk' -exec cp {} dist/ \; 2>/dev/null || true
           ls -la dist/ || true
           if [ -z "$(ls -A dist)" ]; then
             echo "No packages produced!" >&2
