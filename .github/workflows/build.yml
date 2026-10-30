@@ -57,12 +57,21 @@ jobs:
           esac
           mv openwrt-sdk-*/ sdk
 
+      - name: Prepare SDK feeds
+        run: |
+          cd "$HOME/sdk"
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
       - name: Add theme to LuCI feed
         run: |
+          cd "$HOME/sdk"
           DEST="$HOME/sdk/feeds/luci/themes/luci-theme-allure"
           mkdir -p "$DEST"
           cp -r $GITHUB_WORKSPACE/* "$DEST/"
           rm -rf "$DEST/.git" "$DEST/dist" "$DEST/.github"
+          ./scripts/feeds update -f luci
+          ./scripts/feeds install -a
 
       - name: Configure and build package
         run: |
