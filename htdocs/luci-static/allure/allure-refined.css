@@ -1,0 +1,278 @@
+/* Allure 1.8 · cohesive design system for OpenWrt LuCI
+ * Inspired by ergonomic principles (consistent density and alignment), not a copy of Aurora.
+ * CSS is presentation-only. Keep LuCI JS, field names and form semantics untouched.
+ */
+:root {
+  --ar-radius-xs:9px; --ar-radius-sm:12px; --ar-radius:17px; --ar-radius-lg:22px;
+  --ar-control:43px; --ar-space:24px; --ar-ring:0 0 0 3px rgba(122,104,242,.20);
+  --ar-shadow:0 4px 13px rgba(38,40,80,.035),0 14px 46px rgba(38,40,80,.045);
+  --ar-success:#159775; --ar-warning:#bd7928; --ar-danger:#dc5370;
+}
+:root[data-darkmode="true"] {
+  --v-bg:#10131d; --v-panel:#1b1f2b; --v-surface:#232838;
+  --v-glass:rgba(19,22,32,.9); --v-line:#34394b;
+  --v-text:#f0f2fa; --v-secondary:#b0b7c8; --v-muted:#929bad;
+  --v-accent:#a094ff; --v-accent-soft:#332e4e;
+  --ar-shadow:0 7px 26px rgba(0,0,0,.09),0 20px 58px rgba(0,0,0,.1);
+  --ar-success:#4dccae; --ar-warning:#f1b96f; --ar-danger:#ff8598;
+}
+:root[data-darkmode="false"] {
+  --v-bg:#f5f6fb; --v-panel:#fff; --v-surface:#f7f8fd;
+  --v-glass:rgba(255,255,255,.93); --v-line:#e3e6ef;
+  --v-text:#1d2435; --v-secondary:#657084; --v-muted:#838da0;
+  --v-accent:#7363ed; --v-accent-soft:#eeebff;
+}
+body.allure {font-size:14px;line-height:1.58;letter-spacing:0;-webkit-font-smoothing:antialiased}
+body.allure * {scrollbar-color:var(--v-line) transparent}
+body.allure .allure-shell {min-width:0}
+/* Navigation: readable font, clear active state, precise arrows and enough target area. */
+body.allure .allure-sidebar {
+  width:260px;min-width:260px;padding:25px 13px 15px;
+  background:var(--v-panel);border-right:1px solid var(--v-line);
+}
+body.allure .allure-brand {margin-bottom:28px;padding:0 12px}
+body.allure .allure-brand-type strong {font-size:23px}
+body.allure .allure-sidebar-caption {font-size:10px;letter-spacing:1.2px;margin:0 15px 9px}
+body.allure .allure-home {min-height:44px;height:auto;margin:0 3px 19px;font-size:13px;padding:10px 13px;border-radius:12px}
+body.allure .allure-nav-group {margin:0 0 12px}
+body.allure button.allure-nav-heading {min-height:42px;padding:9px 12px;gap:11px;margin:0 0 3px;font-size:11px;letter-spacing:.5px;font-weight:760}
+body.allure .allure-heading-label {min-width:0;flex:1}
+body.allure .allure-heading-chevron {width:17px;height:17px;display:grid;place-items:center;margin-left:auto;flex:none;align-self:center}
+body.allure .allure-heading-chevron svg {height:16px;width:16px;display:block}
+body.allure .allure-nav-entry {position:relative;min-width:0}
+body.allure a.allure-nav-link {min-height:38px;padding:8px 12px;margin:1px 0;gap:10px;font-size:12.5px;line-height:1.4;border-radius:10px}
+body.allure .allure-nav-text {min-width:0;overflow-wrap:anywhere;padding-right:10px}
+body.allure .allure-nav-entry.has-submenu > a.allure-nav-link {padding-right:41px}
+body.allure .allure-nav-entry > .allure-nav-expander {position:absolute;top:0;right:4px;height:38px;width:35px;display:grid;place-items:center;padding:0;margin:0;border:0;background:transparent;border-radius:9px;color:var(--v-muted)}
+body.allure .allure-nav-entry > .allure-nav-expander svg {width:15px;height:15px;display:block}
+body.allure .allure-nav-subitems {padding-left:9px;border-left:1px solid var(--v-line);margin-left:19px}
+body.allure .allure-sidebar-foot {margin-top:auto;padding:12px 10px}
+/* Comfortable application chrome. */
+body.allure .allure-topbar {height:64px;min-height:64px;padding:0 clamp(18px,2.65vw,40px);gap:12px}
+body.allure .allure-breadcrumb {font-size:12px;gap:9px;min-width:0}
+body.allure .allure-breadcrumb b {max-width:min(45vw,360px);overflow:hidden;text-overflow:ellipsis}
+body.allure .allure-online {font-size:10px;letter-spacing:.65px}
+body.allure .allure-topbar-right {gap:12px}
+body.allure .allure-theme-control {border-radius:12px;padding:4px;gap:3px}
+body.allure .allure-theme-control button {width:33px;height:31px;border-radius:9px}
+body.allure .allure-content {max-width:1380px!important;padding:32px clamp(18px,2.7vw,42px) 54px!important}
+body.allure .allure-content :is(#view,.cbi-map,.cbi-tabcontainer) {max-width:100%;min-width:0}
+body.allure .allure-footer {font-size:10px;padding:16px clamp(18px,2.7vw,42px) 24px}
+/* Page titles and hierarchy. Keep the dashboard-specific typography isolated. */
+body.allure .allure-content :is(#view,.cbi-map)>h2:first-child,
+body.allure .allure-content>h2:first-child {font-size:clamp(24px,2vw,30px);line-height:1.22;letter-spacing:-.85px;font-weight:750;margin:2px 0 9px;padding:0;background:none;border:0;color:var(--v-text)}
+body.allure .allure-content :is(.cbi-map-descr,.cbi-section-descr,.cbi-value-description,.cbi-tab-descr) {
+  color:var(--v-secondary);font-size:12.5px;line-height:1.7;max-width:100%;
+}
+body.allure .allure-content .cbi-map-descr {margin:0 0 23px}
+/* Surfaces: one elevation scheme; nested groups have a much quieter background. */
+body.allure .allure-content :is(.cbi-section,.allure-demo-card,.panel,.card,.well):not(.allure-dashboard *) {
+  min-width:0;max-width:100%;color:var(--v-text);background:var(--v-panel);
+  border:1px solid var(--v-line);border-radius:var(--ar-radius-lg);
+  box-shadow:var(--ar-shadow);padding:clamp(20px,2.1vw,30px);margin:0 0 20px;
+}
+body.allure .allure-content :is(.cbi-section,.allure-demo-card) .cbi-section {
+  padding:17px 20px;margin:14px 0;border-radius:var(--ar-radius);
+  box-shadow:none;background:var(--v-surface);
+}
+body.allure .allure-content :is(.cbi-section,.allure-demo-card)>:is(h2,h3,h4),
+body.allure .allure-content .panel>.panel-heading {
+  padding:0 0 15px;margin:0 0 17px;border:0;border-bottom:1px solid var(--v-line);
+  background:transparent;color:var(--v-text);font-size:16px;line-height:1.35;
+  font-weight:735;letter-spacing:-.32px;
+}
+body.allure .allure-content .cbi-section-descr {margin:0 0 16px}
+body.allure .allure-content :is(.ifacebox,.network-status-table) {
+  background:var(--v-panel);border:1px solid var(--v-line);border-radius:var(--ar-radius);
+  box-shadow:none;max-width:100%;min-width:0;overflow:hidden;
+}
+body.allure .allure-content .ifacebox-head {background:var(--v-surface);padding:13px 17px;border-bottom:1px solid var(--v-line);color:var(--v-text)}
+body.allure .allure-content .ifacebox-body {padding:18px}
+/* Semantic tabs: one legible row with horizontal swipe instead of cramped multi-line text. */
+body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.tab-list,.tab-bar,.forkop-app-tabs,[role="tablist"],.allure-auto-tabs) {
+  display:flex;align-items:stretch;flex-wrap:nowrap;gap:6px;max-width:100%;width:100%;min-height:50px;
+  padding:6px;margin:0 0 20px;list-style:none;
+  border:1px solid var(--v-line);border-radius:14px;background:var(--v-surface);
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;
+}
+body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.tab-list,.tab-bar,.forkop-app-tabs,[role="tablist"],.allure-auto-tabs)>li {
+  flex:0 0 auto;display:flex;align-items:stretch;min-width:max-content;margin:0;padding:0;border:0;background:transparent;
+}
+body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.tab-list,.tab-bar,.forkop-app-tabs,[role="tablist"],.allure-auto-tabs) :is(a,[role="tab"],button) {
+  flex:0 0 auto;display:inline-flex;gap:8px;align-items:center;justify-content:center;min-height:38px;
+  padding:8px 14px;margin:0;border:0;border-radius:10px;text-decoration:none;
+  color:var(--v-secondary);background:transparent;line-height:1.25;font-size:12.5px;font-weight:620;
+  white-space:nowrap;box-shadow:none;
+}
+body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.tab-list,.tab-bar,.forkop-app-tabs,[role="tablist"],.allure-auto-tabs) :is(a,button):hover {background:var(--v-panel);color:var(--v-text)}
+body.allure .allure-content :is(.cbi-tab,.active,[aria-selected="true"]) > :is(a,button),
+body.allure .allure-content :is(.tabs,.nav-tabs,.tab-list,.tab-bar,.forkop-app-tabs,[role="tablist"],.allure-auto-tabs) > :is(a.active,button.active,[aria-selected="true"]) {
+  background:var(--v-panel);color:var(--v-accent);box-shadow:0 3px 11px rgba(30,26,80,.08);
+}
+body.allure .allure-content .allure-tab-icon,
+body.allure .allure-content .allure-adaptive-icon {width:15px;height:15px;flex:none}
+/* Form rows: no floating labels, consistent alignment and gap. */
+body.allure .allure-content .cbi-value {display:grid;grid-template-columns:minmax(160px,235px) minmax(0,1fr);align-items:start;column-gap:20px;row-gap:7px;min-width:0;min-height:0;padding:17px 0;margin:0;border-bottom:1px solid var(--v-line)}
+body.allure .allure-content .cbi-value:last-child {border-bottom:0;padding-bottom:0}
+body.allure .allure-content .cbi-value-title {float:none;width:auto;min-width:0;max-width:100%;text-align:left;padding:10px 0 0;margin:0;font-size:12.5px;line-height:1.45;font-weight:660;color:var(--v-text)}
+body.allure .allure-content .cbi-value-field {display:flex;min-width:0;max-width:100%;align-items:center;flex-wrap:wrap;gap:9px 12px;margin:0;padding:0;color:var(--v-text)}
+body.allure .allure-content .cbi-value-field>* {max-width:100%}
+body.allure .allure-content .cbi-value-field .cbi-value-description {flex-basis:100%;margin:2px 0 0;font-size:12px}
+body.allure .allure-content :is(input[type="text"],input[type="password"],input[type="email"],input[type="url"],input[type="search"],input[type="tel"],input[type="number"],input[type="date"],input[type="time"],input:not([type]),select,textarea,.cbi-dropdown) {
+  min-width:0;max-width:100%;min-height:var(--ar-control);box-sizing:border-box;
+  border:1px solid var(--v-line);border-radius:var(--ar-radius-sm);
+  background:var(--v-surface);color:var(--v-text);
+  padding:10px 13px;margin:0;line-height:1.45;font:inherit;font-size:13px;
+  box-shadow:0 1px 2px rgba(0,0,0,.015);
+  transition:border-color .17s ease,box-shadow .17s ease,background .17s ease;
+}
+body.allure .allure-content .cbi-value-field :is(input:not([type]),input[type="text"],input[type="password"],select) {width:min(370px,100%)}
+body.allure .allure-content :is(input,select,textarea)::placeholder {color:var(--v-muted);opacity:1}
+body.allure .allure-content :is(input[type="text"],input[type="password"],input[type="number"],input[type="search"],input[type="email"],input[type="url"],input:not([type]),select,textarea,.cbi-dropdown):focus,
+body.allure .allure-content .cbi-dropdown:focus-within {outline:0;border-color:var(--v-accent);box-shadow:var(--ar-ring)}
+body.allure .allure-content select:not([multiple]):not([size]) {
+  appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:39px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%239a92bc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;background-size:16px;
+}
+body.allure .allure-content textarea {resize:vertical;min-height:94px;line-height:1.6}
+body.allure .allure-content :is(input[type="checkbox"],input[type="radio"],input[type="range"]) {accent-color:var(--v-accent)}
+body.allure .allure-content input[type="checkbox"],body.allure .allure-content input[type="radio"] {width:17px;height:17px;vertical-align:middle;cursor:pointer}
+body.allure .allure-content :is(input,select,textarea):disabled {opacity:.6;cursor:not-allowed}
+/* LuCI custom dropdowns: preserve their event handlers and internal list semantics. */
+body.allure .allure-content .cbi-dropdown {display:inline-flex;position:relative;align-items:center;cursor:pointer;padding:4px 12px}
+body.allure .allure-content .cbi-dropdown>ul {display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:0;padding:0;list-style:none;max-width:100%}
+body.allure .allure-content .cbi-dropdown>ul>li {border-radius:8px;padding:5px 7px}
+body.allure .allure-content .cbi-dropdown>ul.dropdown {background:var(--v-panel);color:var(--v-text);border:1px solid var(--v-line);box-shadow:0 18px 55px #0002;border-radius:12px;max-height:360px;overflow:auto;z-index:90}
+body.allure .allure-content .cbi-dropdown>ul.dropdown>li:hover {background:var(--v-accent-soft)}
+/* Buttons: filled primary, restrained neutral, danger outline, larger touch hit area. */
+body.allure .allure-content :is(button,.cbi-button,.btn,input[type="button"],input[type="submit"],input[type="reset"]) {
+  display:inline-flex;justify-content:center;align-items:center;gap:7px;
+  min-height:38px;min-width:0;max-width:100%;padding:8px 15px;margin:0;
+  border:1px solid var(--v-line);border-radius:10px;
+  background:var(--v-surface);color:var(--v-text);
+  font:inherit;font-size:12.5px;font-weight:660;line-height:1.35;text-decoration:none;
+  text-shadow:none;box-shadow:none;cursor:pointer;
+  transition:background .16s,border-color .16s,box-shadow .16s,transform .16s;
+}
+body.allure .allure-content :is(button,.cbi-button,.btn,input[type="button"],input[type="submit"]) :is(svg,img) {flex:none}
+body.allure .allure-content :is(button,.cbi-button,.btn,input[type="button"],input[type="submit"]):hover:not(:disabled) {border-color:var(--v-accent);background:var(--v-accent-soft);color:var(--v-accent)}
+body.allure .allure-content :is(.cbi-button-apply,.cbi-button-save,.cbi-button-positive,.btn-primary,.btn-success,input[type="submit"].primary) {
+  background:var(--v-accent);border-color:var(--v-accent);color:#fff;
+  box-shadow:0 5px 13px rgba(115,99,237,.15);
+}
+body.allure .allure-content :is(.cbi-button-apply,.cbi-button-save,.cbi-button-positive,.btn-primary,.btn-success,input[type="submit"].primary):hover:not(:disabled) {
+  background:color-mix(in srgb,var(--v-accent) 85%,white);border-color:var(--v-accent);color:#fff;
+}
+body.allure .allure-content :is(.cbi-button-remove,.cbi-button-negative,.btn-danger,.cbi-button-reset) {
+  color:var(--ar-danger);border-color:color-mix(in srgb,var(--ar-danger) 44%,var(--v-line));background:transparent;
+}
+body.allure .allure-content :is(.cbi-button-remove,.cbi-button-negative,.btn-danger,.cbi-button-reset):hover:not(:disabled) {
+  color:var(--ar-danger);background:color-mix(in srgb,var(--ar-danger) 9%,var(--v-panel));
+}
+body.allure .allure-content :is(.cbi-button-add,.btn-outline-success) {color:var(--ar-success);border-color:color-mix(in srgb,var(--ar-success) 50%,var(--v-line));background:transparent}
+body.allure .allure-content :is(button,.cbi-button,.btn,input[type="button"],input[type="submit"]):disabled {opacity:.48;cursor:not-allowed;transform:none}
+body.allure .allure-content .cbi-page-actions,
+body.allure .allure-content :is(.form-actions,.allure-auto-actions) {
+  display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:9px;
+  padding:13px 16px;margin:19px 0 10px;
+  border:1px solid var(--v-line);border-radius:var(--ar-radius);
+  background:var(--v-panel);box-shadow:var(--ar-shadow);min-width:0;
+}
+body.allure .allure-content :is(.cbi-section-actions,.cbi-title-buttons,.btn-toolbar) {display:flex;gap:9px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+/* Tables: high readability while never replacing complex OpenWrt table cells. */
+body.allure .allure-content :is(table,.table,.cbi-section-table) {max-width:100%;width:100%;color:var(--v-text);background:transparent;font-size:12.5px;border-spacing:0;border-collapse:separate}
+body.allure .allure-content :is(table,.table) :is(th,.th) {background:var(--v-surface);color:var(--v-secondary);font-weight:730;font-size:11.5px;letter-spacing:.1px;text-align:left;vertical-align:middle;padding:13px 14px;border-bottom:1px solid var(--v-line)}
+body.allure .allure-content :is(table,.table) :is(td,.td) {padding:13px 14px;border-bottom:1px solid var(--v-line);vertical-align:middle;color:var(--v-text);line-height:1.5}
+body.allure .allure-content :is(table,.table) :is(tr,.tr):hover:not(.table-titles):not(.tr-placeholder) {background:color-mix(in srgb,var(--v-accent) 4%,transparent)}
+body.allure .allure-content :is(table,.table) :is(td,.td) :is(.cbi-button,.btn,button) {font-size:12px;min-height:35px;padding:7px 11px;margin:2px}
+body.allure .allure-content .allure-auto-table {border-radius:var(--ar-radius-sm)}
+body.allure .allure-content :is(.label,.badge,.tag) {display:inline-flex;align-items:center;min-height:22px;padding:3px 9px;border-radius:7px;font-size:11px;font-weight:730}
+body.allure .allure-content :is(.alert-message,.alert) {background:var(--v-surface);border:1px solid var(--v-line);border-radius:var(--ar-radius-sm);padding:15px 17px;margin:14px 0;color:var(--v-text);line-height:1.6}
+body.allure .allure-content :is(.alert-message.warning,.alert-warning) {border-color:color-mix(in srgb,var(--ar-warning) 35%,var(--v-line));background:color-mix(in srgb,var(--ar-warning) 8%,var(--v-panel))}
+body.allure .allure-content :is(.alert-message.error,.alert-danger) {border-color:color-mix(in srgb,var(--ar-danger) 40%,var(--v-line));background:color-mix(in srgb,var(--ar-danger) 8%,var(--v-panel))}
+body.allure .allure-content :is(pre,code) {max-width:100%}
+body.allure .allure-content pre {background:var(--v-surface);border:1px solid var(--v-line);border-radius:12px;padding:14px 16px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+/* Don't stylistically rewrite code editors/terminals or embedded apps. */
+body.allure .allure-content :is(.xterm,.CodeMirror,.ace_editor,.monaco-editor,.terminal,.allure-raw) :is(button,input,select) {all:revert}
+body.allure :is(.cbi-modal,.modal-dialog) {background:var(--v-panel);color:var(--v-text);border:1px solid var(--v-line);border-radius:20px;padding:22px;box-shadow:0 25px 90px #0004}
+body.allure .allure-content :is(a,button,input,select,textarea,[tabindex]):focus-visible {outline:2px solid var(--v-accent);outline-offset:3px}
+/* Tablet: sidebar disappears into drawer and forms get space to breathe. */
+@media(max-width:1100px) {
+  body.allure .allure-sidebar {width:236px;min-width:236px;padding-left:11px;padding-right:11px}
+  body.allure .allure-content {padding:26px 23px 40px!important}
+  body.allure .allure-content .cbi-value {grid-template-columns:minmax(150px,215px) minmax(0,1fr)}
+}
+@media(max-width:820px) {
+  body.allure .allure-sidebar {position:fixed;left:0;top:0;width:min(305px,85vw);min-width:0;height:100dvh;transform:translateX(-105%);box-shadow:16px 0 70px #0003;padding:23px 13px 18px}
+  body.allure.allure-drawer-open .allure-sidebar {transform:translateX(0)}
+  body.allure .allure-topbar {height:62px;min-height:62px;padding:0 16px}
+  body.allure .allure-content {padding:22px 16px 36px!important}
+  body.allure .allure-content .cbi-value {grid-template-columns:1fr;gap:8px;padding:15px 0}
+  body.allure .allure-content .cbi-value-title {padding:0}
+  body.allure .allure-content .cbi-value-field {width:100%}
+  body.allure .allure-content .cbi-value-field :is(input,select,textarea) {width:100%;max-width:100%}
+  body.allure .allure-content :is(.cbi-section,.allure-demo-card,.panel,.card,.well):not(.allure-dashboard *) {padding:19px;margin-bottom:16px}
+  body.allure .allure-content :is(table,.table,.cbi-section-table) {display:block;max-width:100%;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  body.allure .allure-content :is(table,.table) :is(th,.td,td,.th) {padding:11px 12px}
+  body.allure .allure-content .cbi-page-actions {justify-content:stretch}
+  body.allure .allure-content .cbi-page-actions :is(.cbi-button,.btn,button,input[type="submit"],input[type="button"]) {flex:1 1 140px;min-height:44px}
+  body.allure .allure-footer {padding:15px 16px 22px;letter-spacing:.2px}
+}
+@media(max-width:540px) {
+  body.allure .allure-topbar {height:58px;min-height:58px;padding:0 11px}
+  body.allure .allure-breadcrumb {font-size:12px;white-space:nowrap}
+  body.allure .allure-topbar-left {min-width:0;gap:10px}
+  body.allure .allure-topbar-right {gap:4px;flex:none}
+  body.allure .allure-theme-control {padding:3px;gap:2px}
+  body.allure .allure-theme-control button {height:33px;width:31px}
+  body.allure .allure-content {padding:20px 12px 32px!important}
+  body.allure .allure-content :is(.cbi-section,.allure-demo-card,.panel,.card,.well):not(.allure-dashboard *) {padding:17px 14px;border-radius:17px}
+  body.allure .allure-content :is(.cbi-section,.allure-demo-card)>:is(h2,h3,h4) {font-size:15px}
+  body.allure .allure-content .cbi-page-actions {padding:10px;gap:8px}
+  body.allure .allure-content .cbi-page-actions :is(.cbi-button,.btn,button,input[type="submit"],input[type="button"]) {flex:1 1 calc(50% - 8px);font-size:12px;min-width:0}
+  body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.tab-list,.tab-bar,.forkop-app-tabs,[role="tablist"],.allure-auto-tabs) {padding:5px;margin-bottom:15px}
+  body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.tab-list,.tab-bar,.forkop-app-tabs,[role="tablist"],.allure-auto-tabs) :is(a,[role="tab"],button) {padding:8px 12px}
+  body.allure .allure-content :is(.cbi-map,.cbi-section,.allure-demo-card) {min-width:0}
+}
+@media(max-width:360px) {
+  body.allure .allure-breadcrumb b {max-width:80px}
+  body.allure .allure-content .cbi-page-actions :is(.cbi-button,.btn,button,input[type="submit"],input[type="button"]) {flex-basis:100%}
+}
+@media(prefers-reduced-motion:reduce) {
+  body.allure * {scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+
+/* Responsive card tables for small and regular datasets.  This class is added only
+   when all column headers and row structure can be verified without DOM rewrites. */
+@media(max-width:820px) {
+  body.allure .allure-content :is(table,.table).allure-mobile-cards,
+  body.allure .allure-content :is(table,.table).allure-mobile-cards> :is(tbody,thead) {display:block;width:100%;overflow:visible;border:0;background:transparent}
+  body.allure .allure-content .allure-mobile-cards :is(thead,.table-titles,.cbi-section-table-titles,.allure-mobile-head) {display:none}
+  body.allure .allure-content .allure-mobile-cards :is(tr,.tr):not(.table-titles):not(.cbi-section-table-titles):not(.allure-mobile-head) {
+    display:block;width:100%;min-width:0;margin:0 0 10px;padding:8px 14px;
+    border:1px solid var(--v-line);border-radius:13px;background:var(--v-surface);
+  }
+  body.allure .allure-content .allure-mobile-cards :is(td,.td)[data-allure-label] {
+    width:100%;min-width:0;display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;padding:10px 0;border:0;border-bottom:1px solid var(--v-line);
+    text-align:right;white-space:normal;overflow-wrap:anywhere;color:var(--v-text);
+  }
+  body.allure .allure-content .allure-mobile-cards :is(tr,.tr) :is(td,.td)[data-allure-label]:last-child {border-bottom:0}
+  body.allure .allure-content .allure-mobile-cards :is(td,.td)[data-allure-label]::before {
+    content:attr(data-allure-label);align-self:center;flex:0 0 38%;min-width:86px;
+    text-align:left;color:var(--v-secondary);font-size:11px;line-height:1.4;font-weight:690;
+  }
+  body.allure .allure-content .allure-mobile-cards :is(td,.td)[data-allure-label] :is(button,.cbi-button,.btn) {
+    min-height:36px;padding:8px 11px;white-space:normal;overflow-wrap:normal;
+  }
+}
+/* Final state indicators with explicit specificity against Bootstrap and older LuCI rules. */
+body.allure .allure-content ul.cbi-tabmenu > li.cbi-tab > a,
+body.allure .allure-content ul.cbi-tabmenu > li.active > a {background:var(--v-panel);color:var(--v-accent);font-weight:740;box-shadow:0 3px 11px rgba(30,26,80,.08)}
+@media(max-width:820px) {
+  body.allure .allure-content table.allure-mobile-cards > thead,
+  body.allure .allure-content table.allure-mobile-cards > thead > tr,
+  body.allure .allure-content table.allure-mobile-cards > tr.allure-mobile-head {display:none!important}
+  body.allure .allure-content table.allure-mobile-cards > tbody {display:block!important;width:100%;background:transparent}
+}

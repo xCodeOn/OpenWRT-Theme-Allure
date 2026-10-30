@@ -1,3 +1,17 @@
+# Allure 1.8.0 — refined interface
+
+This version consolidates LuCI styling into `allure-refined.css` and adds cautious mobile table cards and horizontally scrollable third-party tabs. Existing LuCI handlers, field names, and router settings remain untouched. Embedded third-party web applications may need specialized styles.
+
+**Install:** copy `Allure_Router_OpenWrt25` to `/tmp` on your router, run `cd /tmp/Allure_Router_OpenWrt25 && sh install.sh` as root, then hard-refresh your browser.
+
+**Rollback over SSH:** `uci set luci.main.mediaurlbase='/luci-static/bootstrap'; uci commit luci; rm -f /tmp/luci-indexcache; /etc/init.d/uhttpd reload`.
+
+Inspired by Aurora's visual hierarchy, but no Aurora code/assets are included. Screenshots use simulated data. Not yet validated on a physical Cudy TR3000.
+
+---
+
+**Legacy notes follow.** In 1.8, `allure-luci-polish.css`, `allure-mobile-fixes.css`, `allure-mobile.js`, and `allure-adaptive.css` were removed; use `allure-refined.css` and `allure-refined.js` instead.
+
 ## Allure 1.7.1 — animated sign-in
 
 Enhanced subtle night-sky aurora ribbons, floating particles, lake reflections, a glass-panel edge glint and a restrained shimmer on the sign-in button. CSS only: no video, external dependencies, network calls, or credential processing. All effects respect `prefers-reduced-motion`. Preview with `preview/login-preview.html?theme=dark&lang=en`. No changes to the LuCI authentication mechanism.
