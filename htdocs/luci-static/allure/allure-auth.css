@@ -231,3 +231,63 @@ body.allure .allure-auth-submit>svg{position:absolute}
   body.allure .allure-auth-submit::before{animation:none!important;will-change:auto!important}
   body.allure .allure-auth-submit::before{display:none}
 }
+
+
+/* Allure 1.8.1 — Safari/iOS/macOS Keychain and Chromium autofill fix.
+   Autofill is intentionally preserved; only its painted appearance changes.
+   IMPORTANT: Scope to login fields so system settings and plugin forms retain their own UI. */
+body.allure.allure-login {
+  --al-autofill-paint: #292e4a;
+  color-scheme: dark;
+}
+:root[data-darkmode="false"] body.allure.allure-login {
+  --al-autofill-paint: #eef0fc;
+  color-scheme: light;
+}
+/* Keep the native credential picker usable; stop its fill layer protruding beyond the field. */
+body.allure.allure-login .allure-auth-field {
+  overflow: hidden;
+}
+body.allure.allure-login .allure-auth-field > input {
+  display:block;
+  flex:1 1 auto;
+  min-width:0;
+  max-width:100%;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  background-image:none!important;
+  color:var(--al-ink)!important;
+  caret-color:var(--al-ink)!important;
+  box-shadow:none!important;
+  -webkit-box-shadow:none!important;
+  -webkit-appearance:none;
+  appearance:none;
+}
+/* Safari may inject a bright yellow fill even when the element background is transparent.
+   The inset paint covers that UA layer and uses the same color as its parent surface. */
+body.allure.allure-login .allure-auth-field > input:-webkit-autofill,
+body.allure.allure-login .allure-auth-field > input:-webkit-autofill:hover,
+body.allure.allure-login .allure-auth-field > input:-webkit-autofill:focus,
+body.allure.allure-login .allure-auth-field > input:autofill {
+  -webkit-text-fill-color:var(--al-ink)!important;
+  caret-color:var(--al-ink)!important;
+  -webkit-box-shadow:0 0 0 1000px var(--al-autofill-paint) inset!important;
+  box-shadow:0 0 0 1000px var(--al-autofill-paint) inset!important;
+  background-image:none!important;
+  border:0!important;
+  border-radius:0!important;
+  /* Delays Safari's native bright background transition without delaying keystrokes. */
+  transition:background-color 99999s ease-out 0s!important;
+}
+/* Match the field backing to the input's inset paint when a saved credential is inserted.
+   :has() is supported by modern Safari and Chromium. Older browsers still use the inset fix. */
+body.allure.allure-login .allure-auth-field:has(> input:-webkit-autofill),
+body.allure.allure-login .allure-auth-field:has(> input:autofill) {
+  background:var(--al-autofill-paint)!important;
+}
+body.allure.allure-login .allure-auth-field:has(> input:-webkit-autofill):focus-within,
+body.allure.allure-login .allure-auth-field:has(> input:autofill):focus-within {
+  border-color:rgba(165,145,255,.84)!important;
+  box-shadow:0 0 0 3px rgba(143,117,255,.12)!important;
+}
