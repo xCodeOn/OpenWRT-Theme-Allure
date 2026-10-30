@@ -1,0 +1,103 @@
+name: build-packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Tag to upload packages to (e.g. v1.0.0). Leave empty to only upload artifacts."
+        required: false
+        default: ""
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve OpenWrt SDK
+        id: sdk
+        env:
+          OWRT_VER: "25.12.5"
+          TARGET: "x86"
+          SUBTARGET: "64"
+        run: |
+          base="https://downloads.openwrt.org/releases/${OWRT_VER}/targets/${TARGET}/${SUBTARGET}"
+          file=$(curl -fsSL "$base/" | grep -oE 'openwrt-sdk-[^"]+\.tar\.(xz|zst)' | head -n1)
+          if [ -z "$file" ]; then
+            echo "SDK archive not found in $base" >&2
+            exit 1
+          fi
+          echo "url=$base/$file" >> "$GITHUB_OUTPUT"
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+
+      - name: Download and extract SDK
+        run: |
+          file="${{ steps.sdk.outputs.file }}"
+          url="${{ steps.sdk.outputs.url }}"
+          case "$file" in
+            *.zst)
+              sudo apt-get update -qq
+              sudo apt-get install -y -qq zstd >/dev/null
+              curl -fsSL -o sdk.tar.zst "$url"
+              unzstd sdk.tar.zst
+              mv sdk.tar.zst sdk.tar
+              tar xf sdk.tar
+              ;;
+            *)
+              curl -fsSL -o sdk.tar.xz "$url"
+              tar xJf sdk.tar.xz
+              ;;
+          esac
+          mv openwrt-sdk-*/ sdk
+
+      - name: Add theme to LuCI feed
+        run: |
+          DEST="sdk/feeds/luci/themes/luci-theme-allure"
+          mkdir -p "$DEST"
+          cp -r $GITHUB_WORKSPACE/* "$DEST/"
+          rm -rf "$DEST/.git" "$DEST/dist" "$DEST/.github"
+
+      - name: Configure and build package
+        working-directory: sdk
+        run: |
+          ./scripts/feeds update -f
+          ./scripts/feeds install -a
+          make defconfig
+          if grep -q 'CONFIG_PACKAGE_luci-theme-allure' .config; then
+            sed -i 's/# CONFIG_PACKAGE_luci-theme-allure is not set/CONFIG_PACKAGE_luci-theme-allure=y/' .config
+          else
+            echo 'CONFIG_PACKAGE_luci-theme-allure=y' >> .config
+          fi
+          make defconfig
+          make package/feeds/luci/luci-theme-allure/compile V=s
+
+      - name: Collect packages
+        run: |
+          mkdir -p dist
+          find sdk/bin -name 'luci-theme-allure*.ipk' -exec cp {} dist/ \; 2>/dev/null || true
+          find sdk/bin -name 'luci-theme-allure*.apk' -exec cp {} dist/ \; 2>/dev/null || true
+          ls -la dist/ || true
+          if [ -z "$(ls -A dist)" ]; then
+            echo "No packages produced!" >&2
+            exit 1
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-theme-allure-packages
+          path: dist/
+          if-no-files-found: error
+
+      - name: Attach to release (dispatch with release_tag)
+        if: github.event_name == 'workflow_dispatch' && inputs.release_tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ inputs.release_tag }}" dist/* --clobber
