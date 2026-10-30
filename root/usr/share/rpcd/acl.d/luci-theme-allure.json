@@ -1,0 +1,8 @@
+{
+  "luci-theme-allure": {
+    "description": "Read only access to router hardware sensor information",
+    "read": {
+      "ubus": { "luci.allure": ["sensors"] }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{%
+ import { getuid, getspnam } from 'luci.core';
+ const boardinfo = ubus.call('system', 'board') ?? {};
+ http.prepare_content('text/html; charset=UTF-8');
+-%}
+<!DOCTYPE html>
+<html lang="{{ dispatcher.lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="darkreader-lock">
+  <title>{{ striptags(`${boardinfo.hostname ?? 'Router'} | ${dispatched?.title ? _(dispatched.title) : 'Allure'}`) }}</title>
+  <script>
+    (function() {
+      var mode = 'auto';
+      try { mode = localStorage.getItem('allure:appearance') || 'auto'; } catch (e) {}
+      var dark = mode === 'dark' || (mode === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches);
+      document.documentElement.setAttribute('data-darkmode', String(dark));
+      document.documentElement.setAttribute('data-allure-mode', mode);
+    })();
+  </script>
+  <link rel="stylesheet" href="/luci-static/bootstrap/cascade.css">
+  <link rel="stylesheet" href="{{ media }}/allure.css">
+  <link rel="icon" href="{{ media }}/icon.svg" type="image/svg+xml">
+  {% if (dispatched?.css): %}<link rel="stylesheet" href="{{ resource }}/{{ dispatched.css }}">{% endif %}
+  {% if (css): %}<style>{{ css }}</style>{% endif %}
+  <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+  <script src="{{ resource }}/cbi.js"></script>
+  <script src="{{ media }}/allure-dashboard-core.js"></script>
+  <script defer src="{{ media }}/allure-ui.js"></script>
+</head>
+<body class="allure lang_{{ dispatcher.lang }}" data-page="{{ entityencode(join('-', length(ctx.request_path) ? ctx.request_path : ctx.path), true) }}">
+{% if (!blank_page): %}
+  <div class="allure-shell">
+    <aside id="allure-sidebar" class="allure-sidebar">
+      <a class="allure-brand" href="{{ dispatcher.build_url('admin/status/allure') }}">
+        <span class="allure-brand-logo"><span class="allure-brand-orb"></span></span>
+        <span class="allure-brand-type"><strong>allure<span class="allure-brand-period">.</span></strong><small>ROUTER CONTROL</small></span>
+      </a>
+      <div class="allure-sidebar-caption">WORKSPACE <span>01</span></div>
+      <a class="allure-home" href="{{ dispatcher.build_url('admin/status/allure') }}"><span class="allure-nav-glyph">◈</span><span>Dashboard</span><span class="allure-nav-arrow">↗</span></a>
+      <nav id="allure-nav" class="allure-nav" aria-label="Router navigation"></nav>
+      <div class="allure-sidebar-foot">
+        <span class="allure-router-icon">◉</span><div><strong>{{ striptags(boardinfo.model ?? 'OpenWrt Router') }}</strong><span>{{ striptags(boardinfo.hostname ?? 'router') }}</span></div><span class="allure-connected-dot"></span>
+      </div>
+    </aside>
+    <div id="allure-overlay" class="allure-overlay"></div>
+    <div class="allure-workspace">
+      <header class="allure-topbar">
+        <div class="allure-topbar-left">
+          <button id="allure-menu-button" type="button" class="allure-icon-button allure-mobile" aria-label="Open menu">☰</button>
+          <div class="allure-breadcrumb"><span>ROUTER</span><span class="allure-slash">/</span><b id="allure-breadcrumb-title">Control Center</b></div>
+        </div>
+        <div class="allure-topbar-right">
+          <span class="allure-online"><span></span> SYSTEM ONLINE</span>
+          <div class="allure-theme-control" aria-label="Appearance">
+            <button type="button" data-allure-theme="light" aria-label="Light mode" title="Light mode">☼</button>
+            <button type="button" data-allure-theme="dark" aria-label="Dark mode" title="Dark mode">☾</button>
+            <button type="button" data-allure-theme="auto" aria-label="System appearance" title="Follow system">◐</button>
+          </div>
+          <div id="indicators" class="allure-indicators"></div>
+          <span class="allure-avatar" title="Administrator">A</span>
+        </div>
+      </header>
+      <div id="maincontent" class="container allure-content">
+        {% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
+        <div class="alert-message warning"><h4>{{ _('No password set!') }}</h4><p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p></div>
+        {% endif %}
+        {% if (boardinfo.rootfs_type == 'initramfs'): %}
+        <div class="alert-message warning"><h4>{{ _('System running in recovery (initramfs) mode.') }}</h4></div>
+        {% endif %}
+        <noscript><div class="alert-message warning">JavaScript is required to use LuCI.</div></noscript>
+        <ul id="topmenu" style="display:none"></ul>
+        <ul id="modemenu" style="display:none"></ul>
+        <div id="tabmenu" style="display:none"></div>
+{% endif %}

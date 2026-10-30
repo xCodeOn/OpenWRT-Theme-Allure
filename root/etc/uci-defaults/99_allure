@@ -1,0 +1,7 @@
+#!/bin/sh
+# Install/register theme but do not override the user's current LuCI theme.
+if ! uci -q get luci.themes.Allure >/dev/null; then
+  uci set luci.themes.Allure='/luci-static/allure'
+  uci commit luci
+fi
+exit 0

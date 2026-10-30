@@ -1,0 +1,9 @@
+{% if (!blank_page): %}
+      </div>
+      <footer class="allure-footer"><span>ALLURE UI <span class="allure-foot-sep">·</span> OpenWrt LuCI</span><span>{{ version.distname }} {{ version.distversion }}</span></footer>
+    </div>
+  </div>
+  <script>L.require('menu-allure');</script>
+{% endif %}
+</body>
+</html>

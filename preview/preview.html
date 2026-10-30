@@ -1,0 +1,31 @@
+<!doctype html><html lang="ru" data-darkmode="true"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Allure — Router Control · UI Preview</title><link rel="stylesheet" href="../htdocs/luci-static/allure/allure.css"><script src="../htdocs/luci-static/allure/allure-dashboard-core.js"></script><script defer src="../htdocs/luci-static/allure/allure-ui.js"></script></head>
+<body class="allure"><div class="allure-shell">
+<aside class="allure-sidebar" id="allure-sidebar"><a class="allure-brand" href="#"><span class="allure-brand-logo"><span class="allure-brand-orb"></span></span><span class="allure-brand-type"><strong>allure<span class="allure-brand-period">.</span></strong><small>ROUTER CONTROL</small></span></a>
+<div class="allure-sidebar-caption">WORKSPACE <span>01</span></div><a class="allure-home" href="#"><span class="allure-nav-glyph">◈</span><span>Dashboard</span><span class="allure-nav-arrow">↗</span></a>
+<nav class="allure-nav">
+<div class="allure-nav-group"><div class="allure-nav-heading">Status</div><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">◫</span> Overview</a><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">⌁</span> Realtime Graphs</a><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">◴</span> System Log</a></div>
+<div class="allure-nav-group"><div class="allure-nav-heading">Network</div><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">◇</span> Interfaces</a><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">◉</span> Wireless</a><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">⬡</span> Firewall</a><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">⌕</span> Diagnostics</a></div>
+<div class="allure-nav-group"><div class="allure-nav-heading">System</div><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">⚙</span> Administration</a><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">▦</span> Software</a><a class="allure-nav-link" href="#"><span class="allure-menu-symbol">↻</span> Backup / Flash Firmware</a></div>
+</nav><div class="allure-sidebar-foot"><span class="allure-router-icon">◉</span><div><strong>Cudy TR3000</strong><span>OpenWrt 25.12</span></div><span class="allure-connected-dot"></span></div></aside>
+<div class="allure-overlay" id="allure-overlay"></div><div class="allure-workspace"><header class="allure-topbar"><div class="allure-topbar-left"><button id="allure-menu-button" class="allure-icon-button allure-mobile">☰</button><div class="allure-breadcrumb"><span>ROUTER</span><span class="allure-slash">/</span><b>Control Center</b></div></div><div class="allure-topbar-right"><span class="allure-online"><span></span> SYSTEM ONLINE</span><div class="allure-theme-control"><button data-allure-theme="light" title="Light mode">☼</button><button data-allure-theme="dark" title="Dark mode">☾</button><button data-allure-theme="auto" title="Auto">◐</button></div><span class="allure-avatar">A</span></div></header>
+<main class="allure-content" id="maincontent"><div id="allure-dashboard-root"></div></main><footer class="allure-footer"><span>ALLURE UI · OpenWrt LuCI</span><span>THEME PREVIEW · SAMPLE DATA</span></footer></div></div>
+<script>
+(function(){
+  var root=document.getElementById('allure-dashboard-root');
+  AllureDash.mount(root);
+  var downloads=[],uploads=[];
+  for(var i=0;i<90;i++){
+    var r=Math.abs(Math.sin(i*.22)*3.3+Math.sin(i*.073+1)*2.9+Math.sin(i*.48)*.9+4.4);
+    var u=Math.abs(Math.sin(i*.16+3)*1.4+Math.sin(i*.1)*.8+2.4);
+    downloads.push((r+((i>34&&i<47)?2:0))*1e6/8);
+    uploads.push(u*1e6/8);
+  }
+  AllureDash.update(root,{board:{model:'Cudy TR3000',release:{version:'25.12.6'}},system:{memory:{total:536870912,available:354334802},uptime:14*86400+7*3600+42*60,load:[Math.round(.45*65535)]},wan:{up:true,device:'eth1',ip:'192.0.2.24'},sensors:[{id:'cpu',label:'CPU / SoC',celsius:49.2,source:'thermal'},{id:'wifi',label:'Wi-Fi Radio',celsius:43.8,source:'hwmon'},{id:'board',label:'Board Sensor',celsius:36.1,source:'thermal'}],rx:downloads.at(-1),tx:uploads.at(-1),rxBytes:39124568234,txBytes:9331581271,downloads:downloads,uploads:uploads});
+  // Values in preview are deliberately synthetic. No request to any router.
+  var isDemo=true;
+  var theme=new URLSearchParams(location.search).get('theme')||'dark';
+  document.documentElement.setAttribute('data-darkmode', String(theme==='dark'));
+  document.documentElement.setAttribute('data-allure-mode', theme);
+  document.querySelectorAll('[data-allure-theme]').forEach(function(b){b.classList.toggle('selected', b.dataset.allureTheme===theme);});
+})();
+</script></body></html>
