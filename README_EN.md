@@ -1,4 +1,14 @@
+# Allure Router UI 1.6.1 — mobile layout fixes
+
+Adds scoped responsive styles and progressive enhancement for plain LuCI tables: mobile cards for simple 2–6-column tables with labels, horizontal scrolling for complex tables; one-row scrollable tabs; compact toolbar and iOS Safari bottom-safe spacing. See `preview/interface-forkop-mobile.html` for a **synthetic** preview, not an actual router screenshot. Vendor-specific custom app DOM and Shadow DOM are not guaranteed. Install using the existing `sh install.sh`, then hard-refresh.
+
 # What's new in Allure 1.4
+
+## New in v1.6 — consistent styling across standard LuCI pages
+
+Added `htdocs/luci-static/allure/allure-luci-polish.css`, loaded after LuCI's own view styles. It normalizes cards, spacing, native and LuCI dropdowns, text inputs, buttons, segmented tabs, tables, alerts, page actions and common dialogs. Primary buttons are purple; destructive and positive actions receive semantic accents. Mobile forms adapt to narrow screens.
+
+Interactive offline demos (synthetic data; no router calls): `preview/interface-system.html`, `interface-packages.html`, `interface-network.html`, and `interface-firewall.html`. The four pages and both color schemes have been browser checked, but **this release has not been installed on a real TR3000**. Independently styled plugins, Shadow DOM and canvas-drawn widgets may need additional specific adaptations. Theme styling never modifies UCI, firewall or networking logic.
 
 ## Fixed in 1.5.1 — vertically centered sidebar arrows
 

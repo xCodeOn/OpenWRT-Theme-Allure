@@ -66,5 +66,5 @@
     </div>
   </section>
 </main>
-<script src="{{ media }}/allure-auth.js?v=1.5.1" defer></script>
+<script src="{{ media }}/allure-auth.js?v=1.6.0" defer></script>
 {% include('footer', { blank_page: true }) %}
