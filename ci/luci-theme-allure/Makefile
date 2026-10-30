@@ -21,21 +21,10 @@ define Build/Compile
 endef
 
 define Package/luci-theme-allure/install
-	$(INSTALL_DIR) $(1)/www/luci-static/allure \
-		$(1)/www/luci-static/resources/view/status \
-		$(1)/etc/uci-defaults \
-		$(1)/usr/share/luci/menu.d \
-		$(1)/usr/share/rpcd/acl.d \
-		$(1)/usr/share/rpcd/ucode \
-		$(1)/usr/share/ucode/luci/template/themes/allure
+	$(INSTALL_DIR) $(1)/etc/uci-defaults $(1)/www $(1)/usr/share/ucode/luci
 	$(INSTALL_BIN) ./files/etc/uci-defaults/99_allure $(1)/etc/uci-defaults/99_allure
-	$(INSTALL_DATA) ./files/www/luci-static/allure/* $(1)/www/luci-static/allure/
-	$(INSTALL_DATA) ./files/www/luci-static/resources/menu-allure.js $(1)/www/luci-static/resources/
-	$(INSTALL_DATA) ./files/www/luci-static/resources/view/status/allure.js $(1)/www/luci-static/resources/view/status/
-	$(INSTALL_DATA) ./files/usr/share/luci/menu.d/* $(1)/usr/share/luci/menu.d/
-	$(INSTALL_DATA) ./files/usr/share/rpcd/acl.d/* $(1)/usr/share/rpcd/acl.d/
-	$(INSTALL_DATA) ./files/usr/share/rpcd/ucode/* $(1)/usr/share/rpcd/ucode/
-	$(INSTALL_DATA) ./files/usr/share/ucode/luci/template/themes/allure/* $(1)/usr/share/ucode/luci/template/themes/allure/
+	$(CP) ./files/www/* $(1)/www/
+	$(CP) ./files/usr/share/* $(1)/usr/share/
 endef
 
 $(eval $(call BuildPackage,luci-theme-allure))

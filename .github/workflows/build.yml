@@ -69,27 +69,12 @@ jobs:
           SRC="$GITHUB_WORKSPACE"
           PKG="package/luci-theme-allure"
           rm -rf "$PKG"
-          mkdir -p "$PKG/files/www/luci-static/allure" \
-                   "$PKG/files/www/luci-static/resources/view/status" \
-                   "$PKG/files/etc/uci-defaults" \
-                   "$PKG/files/usr/share/luci/menu.d" \
-                   "$PKG/files/usr/share/rpcd/acl.d" \
-                   "$PKG/files/usr/share/rpcd/ucode" \
-                   "$PKG/files/usr/share/ucode/luci/template/themes/allure"
+          mkdir -p "$PKG/files/www" "$PKG/files/etc" "$PKG/files/usr/share/ucode/luci"
 
-          cp "$SRC/htdocs/luci-static/allure/allure-dashboard-core.js" "$PKG/files/www/luci-static/allure/"
-          cp "$SRC/htdocs/luci-static/allure/allure-ui.js" "$PKG/files/www/luci-static/allure/"
-          cp "$SRC/htdocs/luci-static/allure/allure.css" "$PKG/files/www/luci-static/allure/"
-          cp "$SRC/htdocs/luci-static/allure/icon.svg" "$PKG/files/www/luci-static/allure/"
-          cp "$SRC/htdocs/luci-static/resources/menu-allure.js" "$PKG/files/www/luci-static/resources/"
-          cp "$SRC/htdocs/luci-static/resources/view/status/allure.js" "$PKG/files/www/luci-static/resources/view/status/"
-          cp "$SRC/root/etc/uci-defaults/99_allure" "$PKG/files/etc/uci-defaults/99_allure"
+          cp -R "$SRC/htdocs/." "$PKG/files/www/"
+          cp -R "$SRC/root/." "$PKG/files/"
+          cp -R "$SRC/ucode/." "$PKG/files/usr/share/ucode/luci/"
           chmod 755 "$PKG/files/etc/uci-defaults/99_allure"
-          cp "$SRC/root/usr/share/luci/menu.d/luci-theme-allure.json" "$PKG/files/usr/share/luci/menu.d/"
-          cp "$SRC/root/usr/share/rpcd/acl.d/luci-theme-allure.json" "$PKG/files/usr/share/rpcd/acl.d/"
-          cp "$SRC/root/usr/share/rpcd/ucode/allure.uc" "$PKG/files/usr/share/rpcd/ucode/"
-          cp "$SRC/ucode/template/themes/allure/footer.ut" "$PKG/files/usr/share/ucode/luci/template/themes/allure/"
-          cp "$SRC/ucode/template/themes/allure/header.ut" "$PKG/files/usr/share/ucode/luci/template/themes/allure/"
 
           cp "$SRC/ci/luci-theme-allure/Makefile" "$PKG/Makefile"
 
