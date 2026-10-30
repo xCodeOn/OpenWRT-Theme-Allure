@@ -1,5 +1,10 @@
 # Allure Changelog
 
+## 2.0.1 — desktop action-row hotfix
+- Fixed desktop alignment for native LuCI action cells: buttons now stay in a horizontal row on wider screens when a page renders multiple actions in the same last table cell.
+- Applied the fix to interface- and service-style pages without changing mobile behavior.
+- Reduced phantom gaps between tab strips and the first content card on affected plugin pages.
+
 ## 2.0.0 — full LuCI layout stabilization
 - Removed conflicting `allure-refined.css`, `allure-refined.js`, `allure-adaptive.js`.
 - New presentation-only `allure-system.css`, respecting native table and LuCI flex table architecture.

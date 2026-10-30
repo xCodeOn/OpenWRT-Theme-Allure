@@ -171,6 +171,47 @@ body.allure .allure-content input[type="file"] {max-width:100%;width:min(100%,36
    padding:6px 9px;font-size:11px;min-height:32px;
  }
 }
+/* Desktop hotfix: keep action buttons in a row on wider screens for native LuCI tables
+   (interfaces, services, package manager rows, etc.) while preserving mobile stacking/scrolling. */
+@media(min-width:821px){
+ body.allure .allure-content table:not(.table) td:last-child:has(> .cbi-button + .cbi-button),
+ body.allure .allure-content table:not(.table) td:last-child:has(> button + button),
+ body.allure .allure-content table:not(.table) td:last-child:has(> form + form),
+ body.allure .allure-content table:not(.table) td:last-child:has(> div + div),
+ body.allure .allure-content .network-status-table td:last-child:has(.cbi-button + .cbi-button),
+ body.allure .allure-content .network-status-table td:last-child:has(form + form),
+ body.allure .allure-content .ifacebox td:last-child:has(.cbi-button + .cbi-button),
+ body.allure .allure-content .ifacebox td:last-child:has(form + form) {
+   display:flex;flex-direction:row;align-items:center;align-content:center;justify-content:flex-end;
+   flex-wrap:wrap;gap:8px;min-width:220px;white-space:normal;
+ }
+ body.allure .allure-content table:not(.table) td:last-child:has(> .cbi-button + .cbi-button) > :is(div,span,form),
+ body.allure .allure-content table:not(.table) td:last-child:has(> button + button) > :is(div,span,form),
+ body.allure .allure-content table:not(.table) td:last-child:has(> form + form) > :is(div,span,form),
+ body.allure .allure-content table:not(.table) td:last-child:has(> div + div) > :is(div,span,form),
+ body.allure .allure-content .network-status-table td:last-child:has(.cbi-button + .cbi-button) > :is(div,span,form),
+ body.allure .allure-content .network-status-table td:last-child:has(form + form) > :is(div,span,form),
+ body.allure .allure-content .ifacebox td:last-child:has(.cbi-button + .cbi-button) > :is(div,span,form),
+ body.allure .allure-content .ifacebox td:last-child:has(form + form) > :is(div,span,form) {
+   display:flex;flex-direction:row;align-items:center;align-content:center;justify-content:flex-end;
+   flex-wrap:wrap;gap:8px;min-width:0;max-width:100%;margin:0;
+ }
+ body.allure .allure-content table:not(.table) td:last-child:has(> .cbi-button + .cbi-button) :is(button,.cbi-button,.btn),
+ body.allure .allure-content table:not(.table) td:last-child:has(> button + button) :is(button,.cbi-button,.btn),
+ body.allure .allure-content table:not(.table) td:last-child:has(> form + form) :is(button,.cbi-button,.btn),
+ body.allure .allure-content table:not(.table) td:last-child:has(> div + div) :is(button,.cbi-button,.btn),
+ body.allure .allure-content .network-status-table td:last-child:has(.cbi-button + .cbi-button) :is(button,.cbi-button,.btn),
+ body.allure .allure-content .network-status-table td:last-child:has(form + form) :is(button,.cbi-button,.btn),
+ body.allure .allure-content .ifacebox td:last-child:has(.cbi-button + .cbi-button) :is(button,.cbi-button,.btn),
+ body.allure .allure-content .ifacebox td:last-child:has(form + form) :is(button,.cbi-button,.btn) {
+   margin:0;flex:0 0 auto;
+ }
+ /* Reduce phantom gaps between top tab bars and the first rendered content block in app pages. */
+ body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.forkop-app-tabs) + :is(.cbi-section,.cbi-section-node,.cbi-map,.cbi-tabcontainer) {
+   margin-top:0 !important;
+ }
+}
+
 /* Variant specificity must exceed the base :is(input[type=submit],...)
    specificity, otherwise Safari/Chromium show grey save/apply controls. */
 body.allure .allure-content :is(.cbi-button.cbi-button-apply,.cbi-button.cbi-button-save,.cbi-button.cbi-button-positive,.btn.btn-primary,.btn.btn-success){background:var(--v-accent);border-color:var(--v-accent);color:#fff}
