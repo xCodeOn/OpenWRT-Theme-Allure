@@ -1,0 +1,83 @@
+/* Allure 1.7 — carefully scoped presentation of newly installed LuCI applications.
+   All rules are visual. Third-party plugin callbacks and original DOM remain intact. */
+body.allure .allure-content {
+  --allure-auto-rail:var(--v-surface);
+  --allure-auto-glow:color-mix(in srgb, var(--v-accent) 15%, var(--v-panel));
+}
+/* Third-party native tabs, even when inserted asynchronously. */
+body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]):not([data-allure-ignore]) {
+  display:flex; flex-flow:row nowrap; align-items:stretch; gap:7px;
+  max-width:100%; min-width:0; padding:6px; margin:0 0 18px;
+  border:1px solid var(--v-line); border-radius:15px;
+  background:var(--allure-auto-rail);
+  overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch; scrollbar-width:thin;
+}
+body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]) > :is(a,button,li,[role="tab"]) {
+  flex:0 0 auto!important; min-width:max-content; max-width:none;
+  list-style:none; margin:0!important; padding:0;
+}
+body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]) > :is(a,button,[role="tab"]),
+body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]) > li > :is(a,button) {
+  display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+  min-height:39px; padding:8px 13px; border:1px solid transparent;
+  border-radius:10px; color:var(--v-secondary); background:transparent;
+  font-size:12px; font-weight:650; text-decoration:none;
+  transition:background .18s ease, color .18s ease;
+}
+body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]) :is(a,button,[role="tab"]):hover {
+  background:var(--allure-auto-glow);color:var(--v-text);
+}
+body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]) :is(.active,.selected,.is-active,.cbi-tab,[aria-selected="true"]) > a,
+body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]) :is(a.active,a.selected,button.active,button.selected,[role="tab"][aria-selected="true"]) {
+  background:var(--allure-auto-glow);color:var(--v-accent);
+  border-color:color-mix(in srgb,var(--v-accent) 27%,transparent);
+}
+body.allure .allure-content .allure-adaptive-icon { width:16px;height:16px; flex:none; vertical-align:middle; }
+/* Neutral action groups; never override button meaning/actions. */
+body.allure .allure-content :is(.allure-auto-actions,[data-allure-role="actions"]):not([data-allure-ignore]) {
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  min-width:0; max-width:100%;
+}
+body.allure .allure-content :is(.allure-auto-actions,[data-allure-role="actions"]) > :is(button,a,.btn,.cbi-button,input[type="submit"],input[type="button"]) {
+  margin:0!important; min-height:39px;
+}
+/* Preserve LuCI select and combobox scripts: CSS only, no custom popover replacement. */
+body.allure .allure-content :is(.form-control,.form-select,.cbi-input-text,.cbi-input-select,.cbi-input-password):not([data-allure-ignore]) {
+  border-radius:11px; max-width:100%;
+}
+body.allure .allure-content :is(.form-control,.form-select,.cbi-input-text,.cbi-input-select,.cbi-input-password):focus-visible {
+  outline:2px solid var(--v-accent);outline-offset:2px;
+}
+body.allure .allure-content .allure-auto-card:not(.allure-dashboard):not([data-allure-ignore]) {
+  max-width:100%; min-width:0;
+}
+body.allure .allure-content :is(.allure-auto-table,[data-allure-role="table"]):not([data-allure-ignore]) {
+  max-width:100%; border-color:var(--v-line);
+}
+body.allure .allure-content .allure-auto-table :is(.cbi-button,.btn,button) { vertical-align:middle; }
+body.allure .allure-content .allure-auto-table :is(.label,.badge) { white-space:nowrap; }
+/* Third party editors/terminals remain styled by their application. */
+body.allure .allure-content :is(.xterm,.CodeMirror,.ace_editor,.monaco-editor,.terminal,[data-allure-ignore]) :is(button,input,textarea,select) {
+  font:inherit;
+}
+@media(max-width:767px) {
+  body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]):not([data-allure-ignore]) {
+    flex-wrap:nowrap!important; padding:5px; gap:5px;
+    scroll-snap-type:x proximity;
+  }
+  body.allure .allure-content :is(.allure-auto-tabs,[data-allure-role="tabs"]) > * { scroll-snap-align:start; }
+  body.allure .allure-content :is(.allure-auto-actions,[data-allure-role="actions"]):not([data-allure-ignore]) {
+    gap:8px; justify-content:stretch;
+  }
+  body.allure .allure-content :is(.allure-auto-actions,[data-allure-role="actions"]) > :is(button,a,.btn,.cbi-button,input[type="submit"],input[type="button"]) {
+    flex:1 1 110px; min-width:0; text-align:center;
+  }
+  body.allure .allure-content .allure-auto-table:not(.allure-mobile-cardtable) {
+    max-width:100%; overflow-x:auto; overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch; scrollbar-width:thin;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  body.allure .allure-content .allure-auto-tabs * { transition:none!important; scroll-behavior:auto!important; }
+}

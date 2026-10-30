@@ -155,3 +155,79 @@ body.allure .allure-auth-theme button.selected{color:var(--al-ink);border-color:
   .allure-auth-card,.allure-auth-logo{animation:none!important;transition:none!important;will-change:auto!important}
   .allure-auth-aurora{opacity:.16!important}
 }
+
+
+/* Allure 1.7.1 — cinematic but deliberately subtle animated login atmosphere.
+   All motion happens on the viewer's device. No calls to the router, no canvas loops. */
+body.allure.allure-login .allure-auth-scene{transform:translateZ(0)}
+/* A barely-lit aurora ribbon slowly arches behind the card. */
+.allure-auth-ribbon{position:absolute;inset:-24% -24% 18%;pointer-events:none;opacity:.23;
+  background:conic-gradient(from 204deg at 51% 23%,transparent 0deg,
+  transparent 45deg,rgba(90,94,177,.13) 75deg,rgba(145,106,222,.22) 91deg,
+  rgba(89,110,203,.12) 111deg,transparent 142deg,transparent 360deg);
+  filter:blur(33px);mix-blend-mode:screen;transform-origin:50% 38%;
+  animation:allure-ribbon-float 32s ease-in-out infinite alternate;will-change:transform,opacity}
+/* Layered dust: a handful of points, not hundreds of animated DOM nodes. */
+.allure-auth-dust{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.48;
+  background:
+    radial-gradient(circle at 12% 15%,rgba(206,192,255,.83) 0 1px,transparent 2px),
+    radial-gradient(circle at 34% 22%,rgba(175,184,255,.62) 0 1px,transparent 2px),
+    radial-gradient(circle at 78% 16%,rgba(219,195,255,.73) 0 1px,transparent 2px),
+    radial-gradient(circle at 90% 37%,rgba(168,177,248,.7) 0 1px,transparent 2px),
+    radial-gradient(circle at 23% 40%,rgba(194,173,255,.64) 0 1px,transparent 2px),
+    radial-gradient(circle at 68% 36%,rgba(202,197,255,.5) 0 1px,transparent 2px);
+  mask-image:linear-gradient(#000 0%,#000 45%,transparent 68%);
+  animation:allure-dust-breathe 10s ease-in-out infinite alternate;will-change:opacity,transform}
+.allure-auth-dust::after{content:"";position:absolute;inset:0;opacity:.65;background:
+    radial-gradient(circle at 17% 30%,rgba(209,194,255,.8) 0 1px,transparent 2px),
+    radial-gradient(circle at 55% 11%,rgba(195,184,253,.84) 0 1px,transparent 2px),
+    radial-gradient(circle at 86% 25%,rgba(198,191,255,.8) 0 1px,transparent 2px);
+  animation:allure-dust-twinkle 7s ease-in-out infinite alternate}
+/* Calm water reflections: thin bands with gentle horizontal drift. */
+.allure-auth-waterlight{position:absolute;inset:64% -20% -5%;pointer-events:none;opacity:.28;
+  background:repeating-linear-gradient(177deg,transparent 0 29px,
+      rgba(129,112,202,.12) 30px,transparent 33px,transparent 55px),
+    linear-gradient(90deg,transparent 9%,rgba(131,110,209,.11) 21%,transparent 42%,
+      rgba(143,121,210,.13) 76%,transparent 94%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 26%,transparent 91%);
+  transform-origin:center 15%;animation:allure-water-drift 19s ease-in-out infinite alternate;
+  will-change:transform,opacity}
+/* Very thin edge glint, no strong neon flashes. */
+body.allure .allure-auth-card{isolation:isolate}
+body.allure .allure-auth-card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;
+  pointer-events:none;z-index:0;opacity:.36;
+  background:linear-gradient(120deg,transparent 14%,rgba(199,189,255,.21) 36%,transparent 58%);
+  animation:allure-card-glint 12s ease-in-out infinite alternate}
+body.allure .allure-auth-submit::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(112deg,transparent 12%,rgba(255,255,255,.14) 45%,transparent 73%);
+  transform:translate3d(-120%,0,0);animation:allure-button-glint 9s ease-in-out infinite;
+  will-change:transform}
+body.allure .allure-auth-submit>span,body.allure .allure-auth-submit>svg{position:relative;z-index:1}
+body.allure .allure-auth-submit>svg{position:absolute}
+@keyframes allure-ribbon-float{
+  from{transform:translate3d(-2%,-2%,0) rotate(-8deg) scale(1);opacity:.10}
+  to{transform:translate3d(3%,1%,0) rotate(7deg) scale(1.1);opacity:.30}}
+@keyframes allure-dust-breathe{
+  from{transform:translate3d(-.25%,.1%,0);opacity:.26}
+  to{transform:translate3d(.35%,-.28%,0);opacity:.52}}
+@keyframes allure-dust-twinkle{from{opacity:.22}to{opacity:.78}}
+@keyframes allure-water-drift{
+  from{transform:translate3d(-1.2%,0,0) scaleX(1);opacity:.18}
+  to{transform:translate3d(1.2%,.4%,0) scaleX(1.02);opacity:.33}}
+@keyframes allure-card-glint{from{opacity:.13}to{opacity:.37}}
+@keyframes allure-button-glint{
+  0%,36%{transform:translate3d(-120%,0,0)}
+  58%,100%{transform:translate3d(120%,0,0)}}
+:root[data-darkmode="false"] .allure-auth-ribbon{opacity:.07;mix-blend-mode:normal}
+:root[data-darkmode="false"] .allure-auth-dust{opacity:.08}
+:root[data-darkmode="false"] .allure-auth-waterlight{opacity:.08}
+@media (max-width:580px){
+  .allure-auth-ribbon{filter:blur(23px);opacity:.17}
+  .allure-auth-waterlight{opacity:.16}
+}
+@media (prefers-reduced-motion:reduce){
+  .allure-auth-ribbon,.allure-auth-dust,.allure-auth-dust::after,
+  .allure-auth-waterlight,body.allure .allure-auth-card::before,
+  body.allure .allure-auth-submit::before{animation:none!important;will-change:auto!important}
+  body.allure .allure-auth-submit::before{display:none}
+}

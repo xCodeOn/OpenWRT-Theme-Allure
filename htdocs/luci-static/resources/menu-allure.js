@@ -40,6 +40,10 @@ const ICONS = {
   power:'<path d="M12 2v10M6 5a9 9 0 1 0 12 0"/>',
   layers:'<path d="m12 2 9 6-9 6-9-6 9-6ZM3 12l9 6 9-6M3 16l9 6 9-6"/>',
   radio:'<circle cx="12" cy="12" r="2"/><path d="M7 7a7 7 0 0 0 0 10M17 7a7 7 0 0 1 0 10M4 4a11 11 0 0 0 0 16M20 4a11 11 0 0 1 0 16"/>',
+  signal:'<path d="M4 20v-4M9 20v-8M14 20V8M19 20V4"/>',
+  bulb:'<path d="M9 18h6M10 22h4M9 15c-2-1-3-3-3-5a6 6 0 0 1 12 0c0 2-1 4-3 5l-1 3h-4l-1-3Z"/>',
+  logout:'<path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5M15 8l5 4-5 4M20 12H9"/>',
+  radioTower:'<path d="M12 14v8M8 22h8M12 8v2M7 4a7 7 0 0 0 0 12M17 4a7 7 0 0 1 0 12M4 1a12 12 0 0 0 0 18M20 1a12 12 0 0 1 0 18"/>',
   chevron:'<path d="m6 9 6 6 6-6"/>'
 };
 const routes = {
@@ -63,7 +67,10 @@ const routes = {
   dns:'globe',dhcp:'server',dhcpdns:'server',
   logout:'logout',login:'key',log:'file',systemlog:'file',kernel:'file',
   processes:'cpu',process:'cpu',monitor:'activity',realtime:'chart',
-  iproutes:'route',routing:'route',mac80211:'radioTower',wireless:'wifi'
+  iproutes:'route',routing:'route',mac80211:'radioTower',wireless:'wifi',
+  adguardhome:'shield',adguard:'shield',homeproxy:'globe',nikki:'globe',tailscale:'shield',zerotier:'network',
+  docker:'box',dockerman:'box',podman:'box',diskman:'harddrive',filemanager:'file',transmission:'download',
+  mosquitto:'server',sqm:'chart',pbr:'route',banip:'shield',statistics:'chart',vnstat:'chart'
 };
 const titleIcons = [
   [/wi-?fi|wireless|беспровод/i,'wifi'],[/firewall|брандмауэр|межсетевой/i,'shield'],

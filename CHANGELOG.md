@@ -1,3 +1,20 @@
+## 1.7.1 — 2026-10-30
+- Enhanced login-only ambient animation: aurora ribbons, star dust, lake reflection, edge glow and button shimmer.
+- Motion accessibility via `prefers-reduced-motion`; no libraries, no login API changes.
+- Refreshed login stylesheet URL for cache busting.
+
+# Changelog
+
+## 1.7.0
+
+- Automatically style common third-party LuCI tab bars, action rows, forms and tables.
+- Apply presentation to dynamically inserted markup; no event or form changes.
+- Built-in tab SVGs with localized keyword selection and fallback.
+- Expand navigation icon mapping for popular installed packages, and fix missing icon shapes.
+- Preserve complex table scrolling and opt out of code editors/terminal interfaces.
+- Add developer compatibility guide, interactive demo, desktop and mobile screenshots.
+- Retain 1.6.1 mobile fixes, RU/EN localization, light/dark/system modes, login animations and telemetry.
+
 ## 1.6.1 — мобильная вёрстка и совместимость сторонних вкладок
 
 - Исправлена адаптация карточек, таблиц и панели действий на iPhone.

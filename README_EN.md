@@ -1,3 +1,21 @@
+## Allure 1.7.1 — animated sign-in
+
+Enhanced subtle night-sky aurora ribbons, floating particles, lake reflections, a glass-panel edge glint and a restrained shimmer on the sign-in button. CSS only: no video, external dependencies, network calls, or credential processing. All effects respect `prefers-reduced-motion`. Preview with `preview/login-preview.html?theme=dark&lang=en`. No changes to the LuCI authentication mechanism.
+
+# Allure Router UI v1.7 — automatic styling for new LuCI packages
+
+**New:** a progressive visual compatibility layer for standard and third-party LuCI views. Common LuCI/HTML controls are styled by CSS; asynchronously inserted tabs, action bars and tables are recognized by a small MutationObserver-based script. The module does not change form values, HTTP calls, application listeners, or router configuration.
+
+**Files:** `htdocs/luci-static/allure/allure-adaptive.css` and `allure-adaptive.js`, included from `ucode/template/themes/allure/header.ut`. More built-in icons have been added for services such as AdGuard Home, Docker and VPN-related packages.
+
+**Try without a router:** open `preview/interface-new-plugin.html`. The page simulates installed packages and a dynamically loaded panel. All displayed data are fake; no real package is installed or controlled. Screenshots are in `preview/screenshots/Allure_v1.7_*`.
+
+**Limits:** iframe apps, closed Shadow DOM, canvas, terminal emulators, and heavily custom third-party layouts may still need per-plugin adjustments. Complex tables remain scrollable when stacking would be unsafe. Third-party translations require their own i18n packages. **Not yet tested on a physical Cudy TR3000.**
+
+Install: unpack, copy the `Allure_Router_OpenWrt25` folder to the router, run `sh install.sh` and hard refresh LuCI. Back up your OpenWrt configuration first. For details see `COMPATIBILITY_EN.md`.
+
+---
+
 # Allure Router UI 1.6.1 — mobile layout fixes
 
 Adds scoped responsive styles and progressive enhancement for plain LuCI tables: mobile cards for simple 2–6-column tables with labels, horizontal scrolling for complex tables; one-row scrollable tabs; compact toolbar and iOS Safari bottom-safe spacing. See `preview/interface-forkop-mobile.html` for a **synthetic** preview, not an actual router screenshot. Vendor-specific custom app DOM and Shadow DOM are not guaranteed. Install using the existing `sh install.sh`, then hard-refresh.
