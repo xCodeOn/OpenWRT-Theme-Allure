@@ -34,6 +34,6 @@
     else if (media.addListener) media.addListener(changed);
   }
   if (document.readyState === 'loading')
-    document.addEventListener('DOMContentLoaded', function(){ apply(getMode()); });
-  else apply(getMode());
+    document.addEventListener('DOMContentLoaded', function(){ apply(getMode()); if (window.AllureI18n) window.AllureI18n.translate(document.body); });
+  else { apply(getMode()); if (window.AllureI18n) window.AllureI18n.translate(document.body); }
 })();

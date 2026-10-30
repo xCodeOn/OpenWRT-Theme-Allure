@@ -7,6 +7,11 @@ const callBoard = rpc.declare({object:'system',method:'board'});
 const callInfo = rpc.declare({object:'system',method:'info'});
 const callInterfaces = rpc.declare({object:'network.interface',method:'dump'});
 const callSensors = rpc.declare({object:'luci.allure',method:'sensors'});
+// Keep failures distinct from an actual kernel with no sensor files.
+function thermalResult() {
+  return callSensors().then(x => (x && Array.isArray(x.sensors)) ? x : {sensors:[],status:'rpc-invalid'},
+    err => { console.warn('Allure thermal RPC unavailable:', err); return {sensors:[],status:'rpc-error'}; });
+}
 const callRealtime = rpc.declare({object:'luci',method:'getRealtimeStats',params:['mode','device'],expect:{result:[]}});
 const callDevice = rpc.declare({object:'network.device',method:'status',params:['name']});
 
@@ -41,17 +46,17 @@ function parseRows(rows,state) {
 
 return view.extend({
   load() {
-    return Promise.all([safely(callBoard(),{}),safely(callInfo(),{}),safely(callInterfaces(),{}),safely(callSensors(),{sensors:[]})]);
+    return Promise.all([safely(callBoard(),{}),safely(callInfo(),{}),safely(callInterfaces(),{}),thermalResult()]);
   },
   render(results) {
     const root = E('div',{'id':'allure-dashboard-root'});
-    if (!window.AllureDash) return E('p','Dashboard renderer unavailable. Clear the browser cache and reload.');
+    if (!window.AllureDash) return E('p',window.AllureI18n?.t('Dashboard renderer unavailable. Clear the browser cache and reload.') || 'Dashboard renderer unavailable. Clear the browser cache and reload.');
     window.AllureDash.mount(root,(path)=>L.url.apply(L,path));
     const state={downloads:[],uploads:[],last:null,rx:null,tx:null,rxBytes:null,txBytes:null,counter:null};
     let wan=findWAN(results[2]);
-    window.AllureDash.update(root,{board:results[0],system:results[1],wan,sensors:results[3].sensors||[]});
+    window.AllureDash.update(root,{board:results[0],system:results[1],wan,sensors:results[3]});
     const refresh=()=> {
-      const calls=[safely(callInfo(),{}),safely(callInterfaces(),{}),safely(callSensors(),{sensors:[]})];
+      const calls=[safely(callInfo(),{}),safely(callInterfaces(),{}),thermalResult()];
       return Promise.all(calls).then(async ([info,interfaces,thermal])=>{
         wan=findWAN(interfaces);
         const device=wan.device;
@@ -73,7 +78,7 @@ return view.extend({
             }
           }
         }
-        window.AllureDash.update(root,{system:info,wan,sensors:thermal.sensors||[],rx:state.rx,tx:state.tx,rxBytes:state.rxBytes,txBytes:state.txBytes,downloads:state.downloads,uploads:state.uploads});
+        window.AllureDash.update(root,{system:info,wan,sensors:thermal,rx:state.rx,tx:state.tx,rxBytes:state.rxBytes,txBytes:state.txBytes,downloads:state.downloads,uploads:state.uploads});
       }).catch(e=>{window.AllureDash.update(root,{error:'Telemetry is temporarily unavailable. Please check rpcd and browser console.'});console.error('Allure refresh:',e);});
     };
     // poll.add handles page lifecycle and prevents overlapping scheduled refreshes.

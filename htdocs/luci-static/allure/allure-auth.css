@@ -1,0 +1,58 @@
+/* Allure 1.3 — deliberately subdued aurora login scene.
+   All light layers are CSS animations: no video, bitmap, canvas or network downloads.
+   Motion moves transforms/opacity slowly and respects prefers-reduced-motion. */
+body.allure.allure-login{--al-text:#f4f3ff;--al-muted:#9fa7c6;--al-field:rgba(21,28,52,.50);--al-field-border:rgba(178,181,243,.15);--al-glass:rgba(19,24,44,.74);--al-card-border:rgba(181,177,247,.20);--al-night:#0b1022;color:var(--al-text)!important;overflow-x:hidden;background:var(--al-night)!important}
+:root[data-darkmode="false"] body.allure.allure-login{--al-text:#25284a;--al-muted:#697291;--al-field:rgba(251,252,255,.67);--al-field-border:rgba(112,115,178,.18);--al-glass:rgba(246,248,255,.80);--al-card-border:rgba(123,132,201,.22);--al-night:#e8edf9;background:var(--al-night)!important}
+.allure-auth{width:100%;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:50px 20px 62px;isolation:isolate;position:relative;overflow:hidden}
+.allure-auth-scene{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse 65% 45% at 56% 105%,rgba(58,54,128,.13),transparent 80%),linear-gradient(165deg,#0a1020 0%,#12172d 48%,#0a1020 100%)}
+:root[data-darkmode="false"] .allure-auth-scene{background:radial-gradient(ellipse 70% 60% at 55% 105%,rgba(152,152,232,.25),transparent 80%),linear-gradient(160deg,#ebeffb 5%,#dce4f4 55%,#edf2fa 100%)}
+.allure-auth-stars{position:absolute;inset:0;opacity:.24;background-image:radial-gradient(circle,#c2c2ff .8px,transparent 1.2px),radial-gradient(circle,#abb7ff .6px,transparent 1px);background-size:89px 127px,163px 211px;background-position:11px 24px,58px 103px;mask-image:linear-gradient(180deg,black,transparent 85%);animation:allure-stars 70s linear infinite}
+:root[data-darkmode="false"] .allure-auth-stars{opacity:.14}
+.allure-auth-glow{position:absolute;left:50%;top:50%;height:480px;width:1100px;border-radius:50%;filter:blur(88px);opacity:.18;will-change:transform;transform:translate3d(-50%,-50%,0);pointer-events:none}
+.allure-auth-glow-a{background:radial-gradient(ellipse,rgba(88,84,207,.68),rgba(64,62,159,.15) 53%,transparent 74%);top:31%;left:12%;animation:allure-drift-a 26s ease-in-out infinite alternate}
+.allure-auth-glow-b{background:radial-gradient(ellipse,rgba(85,101,178,.61),rgba(75,71,159,.14) 53%,transparent 76%);top:75%;left:89%;animation:allure-drift-b 33s ease-in-out infinite alternate}
+.allure-auth-glow-c{background:radial-gradient(ellipse,rgba(132,83,184,.38),transparent 72%);top:97%;left:36%;opacity:.13;animation:allure-drift-c 30s ease-in-out infinite alternate}
+:root[data-darkmode="false"] .allure-auth-glow{opacity:.20}
+.allure-auth-horizon{position:absolute;inset:auto -20% -45% -20%;height:80%;border-radius:50% 50% 0 0;background:radial-gradient(ellipse at 50% 10%,rgba(121,115,255,.16),transparent 48%);box-shadow:0 -1px 0 rgba(149,144,255,.09);transform-origin:50% 100%;animation:allure-horizon 24s ease-in-out infinite alternate}
+:root[data-darkmode="false"] .allure-auth-horizon{background:radial-gradient(ellipse at 50% 10%,rgba(141,146,236,.20),transparent 50%);box-shadow:0 -1px 0 rgba(100,106,173,.10)}
+@keyframes allure-drift-a{from{transform:translate3d(-47%,-53%,0) rotate(-6deg) scale(1)}to{transform:translate3d(-39%,-46%,0) rotate(9deg) scale(1.13)}}
+@keyframes allure-drift-b{from{transform:translate3d(-58%,-50%,0) rotate(4deg) scale(1.08)}to{transform:translate3d(-65%,-55%,0) rotate(-10deg) scale(.93)}}
+@keyframes allure-drift-c{from{transform:translate3d(-55%,-55%,0)}to{transform:translate3d(-44%,-49%,0) scale(1.23)}}
+@keyframes allure-stars{from{transform:translate3d(0,0,0)}to{transform:translate3d(-48px,18px,0)}}
+@keyframes allure-horizon{from{transform:translate3d(0,4%,0) scaleX(1)}to{transform:translate3d(0,-1%,0) scaleX(1.12)}}
+.allure-auth-card{width:min(100%,436px);padding:38px 42px 28px;border:1px solid var(--al-card-border);border-radius:28px;background:var(--al-glass);color:var(--al-text);box-shadow:0 36px 90px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(27px) saturate(115%);-webkit-backdrop-filter:blur(27px) saturate(115%);text-align:center;animation:allure-login-enter .8s cubic-bezier(.2,.7,.2,1) both}
+:root[data-darkmode="false"] .allure-auth-card{box-shadow:0 30px 80px rgba(63,72,132,.15),inset 0 1px 0 #fff7}
+@keyframes allure-login-enter{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.allure-auth-logo{height:62px;width:62px;display:grid;place-items:center;margin:0 auto 10px;color:#a298ff}.allure-auth-logo svg{width:48px;height:48px;filter:drop-shadow(0 0 13px rgba(144,121,244,.23))}
+.allure-auth-card h1{font-family:inherit;font-size:35px!important;font-weight:750!important;line-height:1.1;margin:4px 0 5px!important;letter-spacing:-1.4px;color:var(--al-text)!important}
+.allure-auth-kicker{font-size:12px;color:var(--al-muted);margin:0!important;letter-spacing:.15px}
+.allure-auth-divider{height:1px;width:100%;background:linear-gradient(90deg,transparent,var(--al-field-border),transparent);margin:29px 0 26px}
+.allure-auth-card h2{font-size:21px!important;letter-spacing:-.55px;margin:0 0 5px!important;font-weight:720!important;line-height:1.35;color:var(--al-text)!important}.allure-auth-description{margin:0 0 24px!important;color:var(--al-muted);font-size:12px}
+.allure-auth-form{text-align:left}.allure-auth-form>label{display:block;font-size:11px;font-weight:680;margin:14px 0 7px;color:var(--al-muted)}
+.allure-auth-field{min-height:48px;display:flex;align-items:center;gap:10px;border:1px solid var(--al-field-border);border-radius:12px;background:var(--al-field);padding:0 13px;transition:border-color .2s,background .2s;position:relative}
+.allure-auth-field:focus-within{border-color:rgba(151,132,253,.70);box-shadow:0 0 0 3px rgba(140,114,255,.10)}.allure-auth-field>svg{width:18px;height:18px;color:var(--al-muted);flex:none}
+body.allure .allure-auth-field input{width:100%;min-width:0;height:46px;min-height:0!important;padding:0!important;margin:0!important;border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important;color:var(--al-text)!important;font-size:13px!important;line-height:normal!important;letter-spacing:.12px}
+body.allure .allure-auth-field input::placeholder{color:var(--al-muted)!important}
+.allure-auth-password-toggle{height:35px;width:35px;padding:8px;border:0;border-radius:9px;background:transparent;color:var(--al-muted);cursor:pointer;flex:none}.allure-auth-password-toggle svg{width:18px;height:18px}.allure-auth-password-toggle:hover{color:#b7abff;background:rgba(139,128,243,.09)}
+body.allure .allure-auth-submit{margin-top:23px;width:100%;height:47px;border:0;border-radius:12px;background:linear-gradient(110deg,#6259d9,#8570e6);color:white;font-weight:750;font-family:inherit;font-size:13px;box-shadow:0 10px 22px rgba(102,83,221,.16);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:transform .2s,filter .2s}
+body.allure .allure-auth-submit:hover{transform:translateY(-1px);filter:brightness(1.09)}body.allure .allure-auth-submit:focus-visible,.allure-auth-theme button:focus-visible,.allure-auth-password-toggle:focus-visible{outline:2px solid #a99fff;outline-offset:3px}.allure-auth-submit svg{width:16px;height:16px;margin-left:5px}
+.allure-auth-notice{margin:0 0 16px;padding:11px 13px;border:1px solid rgba(235,147,162,.30);color:#fab4c4;background:rgba(180,66,89,.1);border-radius:10px;font-size:12px;text-align:left}.allure-auth-challenge{padding:16px 0 0}
+.allure-auth-bottom{padding-top:26px}.allure-auth-status{font-size:11px;color:var(--al-muted);display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:21px}.allure-auth-status>span:first-child{width:6px;height:6px;border-radius:100%;background:#59bfa0;box-shadow:0 0 9px #59bfa055}.allure-auth-status-separator{opacity:.4}
+.allure-auth-theme{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-radius:12px;padding:4px;border:1px solid var(--al-field-border);background:var(--al-field);gap:4px}
+body.allure .allure-auth-theme button{appearance:none;min-height:37px;border:1px solid transparent;background:transparent;border-radius:9px;color:var(--al-muted);font-size:11px;font-weight:700;display:flex;gap:6px;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;transition:background .2s,color .2s,border .2s}
+body.allure .allure-auth-theme button span:first-child{font-size:16px;line-height:1}
+body.allure .allure-auth-theme button.selected{background:rgba(121,112,220,.21);border-color:rgba(164,147,255,.32);color:var(--al-text);box-shadow:0 1px 7px #0001}
+:root[data-darkmode="false"] body.allure .allure-auth-theme button.selected{background:#fff9;border-color:#a5a6db70}
+.allure-auth-corner{position:absolute;bottom:20px;left:0;width:100%;display:flex;justify-content:center;gap:8px;color:var(--al-muted);font-size:10px;letter-spacing:.3px;opacity:.72}.allure-auth-dot{opacity:.5}
+@media(max-width:500px){.allure-auth{padding:35px 14px 54px}.allure-auth-card{padding:30px 23px 24px;border-radius:23px}.allure-auth-card h1{font-size:31px!important}.allure-auth-divider{margin:24px 0}.allure-auth-glow{filter:blur(80px)}}
+@media(prefers-reduced-motion:reduce){.allure-auth-glow,.allure-auth-stars,.allure-auth-horizon,.allure-auth-card{animation:none!important;will-change:auto}}
+
+/* Two distant, softly parallaxing landscape silhouettes. */
+.allure-auth-scene::before,.allure-auth-scene::after{content:"";position:absolute;pointer-events:none;will-change:transform}
+.allure-auth-scene::before{inset:auto -9% -9% -9%;height:57%;background:linear-gradient(180deg,rgba(33,36,69,.25),rgba(12,18,37,.76));clip-path:polygon(0 43%,8% 51%,16% 44%,27% 62%,37% 44%,44% 56%,55% 47%,67% 59%,79% 40%,90% 51%,100% 34%,100% 100%,0 100%);opacity:.85;animation:allure-landscape-a 38s ease-in-out infinite alternate}
+.allure-auth-scene::after{inset:auto -7% -18% -7%;height:41%;background:linear-gradient(180deg,rgba(21,24,47,.26),rgba(7,11,26,.79));clip-path:polygon(0 36%,12% 25%,22% 39%,32% 26%,49% 38%,61% 21%,73% 38%,87% 22%,100% 34%,100% 100%,0 100%);opacity:.75;animation:allure-landscape-b 45s ease-in-out infinite alternate}
+:root[data-darkmode="false"] .allure-auth-scene::before{background:linear-gradient(180deg,rgba(166,176,222,.17),rgba(184,194,227,.45))}
+:root[data-darkmode="false"] .allure-auth-scene::after{background:linear-gradient(180deg,rgba(165,176,216,.16),rgba(205,215,238,.56))}
+@keyframes allure-landscape-a{from{transform:translate3d(-1%,1%,0) scale(1.01)}to{transform:translate3d(2%,-1%,0) scale(1.03)}}
+@keyframes allure-landscape-b{from{transform:translate3d(1%,0,0) scale(1)}to{transform:translate3d(-2%,1%,0) scale(1.02)}}
+@media(prefers-reduced-motion:reduce){.allure-auth-scene::before,.allure-auth-scene::after{animation:none!important;will-change:auto}}
