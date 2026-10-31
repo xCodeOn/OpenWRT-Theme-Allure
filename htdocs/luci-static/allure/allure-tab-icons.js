@@ -40,14 +40,98 @@
       link.prepend(makeIcon(kind));
     });
   }
+  /* Mobile: map table-button labels to compact icons (CSS renders them icon-only). */
+  const BTN_ICONS = [
+    [/^(edit|изменить|редактировать)$/i,'edit'],
+    [/^(delete|удалить|remove)$/i,'trash'],
+    [/^(restart|перезапустить|reboot|перезагрузить)$/i,'rotate'],
+    [/^(reload|перечитать)$/i,'reload'],
+    [/^(start|запустить)$/i,'play'],
+    [/^(stop|terminate|остановить|прервать)$/i,'stop'],
+    [/^(kill|disconnect|отключить)$/i,'x'],
+    [/^hang ?up$/i,'hangup'],
+    [/^(enabled|enable|disable|включено|включить|отключить)$/i,'power'],
+    [/^(save|сохранить|ok|apply|применить|confirm|подтвердить|dismiss)$/i,'check'],
+    [/^(install|установить|update lists|обновить списки|generate archive|download backup|скачать)$/i,'download'],
+    [/^(upload package|upload archive|restore|восстановить)$/i,'upload'],
+    [/^(configure apk|настроить)$/i,'gear'],
+    [/^(scan|поиск)$/i,'search'],
+    [/^(add|добавить)$/i,'plus'],
+    [/^reserve ip$/i,'pin'],
+    [/^(reset|perform reset|сбросить|сброс)$/i,'rotate'],
+    [/^(update)$/i,'rotate']
+  ];
+  function decorateButtons(root){
+    if(!root.querySelectorAll)return;
+    root.querySelectorAll('td button, td .cbi-button, th button, th .cbi-button').forEach(function(b){
+      if (b.dataset.allureIconDone==='1')return;
+      b.dataset.allureIconDone='1';
+      if (b.closest('.cbi-page-actions, .controls'))return;
+      const label=(b.textContent||'').trim();
+      for (const [re,name] of BTN_ICONS){ if(re.test(label)){ b.dataset.allureIcon=name; return; } }
+    });
+  }
+  /* Themed horizontal-scroll indicator for tables and tab strips that overflow on mobile. */
+  function updateScrollbar(el, inline){
+    const fits = el.scrollWidth <= el.clientWidth + 6;
+    if (fits) {
+      el.classList.remove('allure-hscroll');
+      const old = el.nextElementSibling;
+      if (old && old.classList && old.classList.contains('allure-scrollbar')) old.remove();
+      return;
+    }
+    el.classList.add('allure-hscroll');
+    let ind = el.nextElementSibling;
+    if (!ind || !ind.classList || !ind.classList.contains('allure-scrollbar')) {
+      ind = document.createElement('div');
+      ind.className = 'allure-scrollbar' + (inline ? ' allure-scrollbar-inline' : '');
+      ind.setAttribute('aria-hidden', 'true');
+      ind.appendChild(document.createElement('span'));
+      el.after(ind);
+    } else {
+      ind.classList.toggle('allure-scrollbar-inline', !!inline);
+    }
+    const span = ind.firstChild;
+    const w = Math.max(14, Math.round((el.clientWidth / el.scrollWidth) * 100));
+    const travel = 100 - w;
+    const pos = el.scrollWidth > el.clientWidth ? (el.scrollLeft / (el.scrollWidth - el.clientWidth)) * travel : 0;
+    span.style.width = w + '%';
+    span.style.left = pos + '%';
+  }
+  function scanScrollbars(root){
+    const mobile = window.innerWidth <= 820;
+    root.querySelectorAll('.allure-hscroll').forEach(function(t){
+      if (!mobile) {
+        t.classList.remove('allure-hscroll');
+        const old = t.nextElementSibling;
+        if (old && old.classList && old.classList.contains('allure-scrollbar')) old.remove();
+      }
+    });
+    if (!mobile) return;
+    root.querySelectorAll('table.table, .table, .cbi-tabmenu, .tabs, #tabmenu').forEach(function(el){
+      if (el.dataset.allureScrollInit !== '1') {
+        el.dataset.allureScrollInit = '1';
+        el.addEventListener('scroll', function(){ updateScrollbar(el); }, { passive: true });
+      }
+      updateScrollbar(el, el.matches('.cbi-tabmenu, .tabs, #tabmenu'));
+      if (el.matches('.cbi-tabmenu, .tabs, #tabmenu')) el.classList.toggle('allure-tabs-centered', el.scrollWidth <= el.clientWidth + 6);
+    });
+  }
+
   function ready(){
     const main=document.getElementById('maincontent');if(!main)return;
     decorate();
+    decorateButtons(main);
+    scanScrollbars(main);
     let pending=false;
     const observer=new MutationObserver(function(){
-      if(!pending){pending=true;requestAnimationFrame(function(){pending=false;decorate();});}
+      if(!pending){pending=true;requestAnimationFrame(function(){pending=false;decorate();decorateButtons(main);scanScrollbars(main);});}
     });
     observer.observe(main,{subtree:true,childList:true});
+    let rzPending=false;
+    window.addEventListener('resize', function(){
+      if(!rzPending){rzPending=true;requestAnimationFrame(function(){rzPending=false;scanScrollbars(main);});}
+    }, { passive: true });
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);
   else ready();

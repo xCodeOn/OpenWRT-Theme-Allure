@@ -1,5 +1,17 @@
 # Allure Changelog
 
+## 2.0.6 — themed scroll indicators
+- Tables that overflow horizontally on mobile now show an always-visible themed scroll pill (gradient thumb on a soft track) that tracks the scroll position; the plain native scrollbar inside tables is hidden.
+- Indicators appear/disappear automatically as content changes and are removed on desktop widths.
+
+## 2.0.5 — mobile perfectionism pass
+- Table action buttons on mobile become compact 34 px icon buttons (pencil / trash / rotate / play / stop / power / check / download / …) keyed by their label, so columns stop wrapping and text stops hiding under buttons. Labels remain for screen readers and desktop is untouched.
+- Block-table rows hug the left edge on mobile (Startup rows no longer bleed off both sides).
+- Form labels (System, DNS, Diagnostics…) read left-aligned above their fields instead of centered.
+- Inline filter rows (System Log) keep "Not + label + field" together on one wrapping line.
+- Diagnostics-style layout tables stack: full-width input with the action dropdown underneath instead of letter-stacked buttons.
+- Forkop routing-card layout stays authoritative on mobile (the earlier native-cell override broke it into vertical letters).
+
 ## 2.0.3 — single-line action buttons
 - Process list: action buttons no longer overlap the "Memory usage" column — native-table action cells stay real table-cells (a flex td broke column negotiation); nowrap keeps the cluster on one line and the column grows to fit.
 - Log out is now a plain one-click nav button with a warm hover instead of a collapsible submenu.

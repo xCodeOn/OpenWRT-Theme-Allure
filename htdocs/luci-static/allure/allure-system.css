@@ -164,6 +164,79 @@ body.allure .allure-content :is(button,input,select,textarea,a):focus-visible {o
  /* LuCI .controls rows (package manager filters/actions) may not overflow their card. */
  body.allure .allure-content .controls {flex-wrap:wrap;row-gap:8px}
  body.allure .allure-content .controls .control-group {flex-wrap:wrap;max-width:100%}
+
+ /* ---- Mobile polish (2.0.4) ----
+    1. Rows of block-tables hug the left edge instead of centering. */
+ body.allure .allure-content .table > .tr,
+ body.allure .allure-content table.table > tr.tr,
+ body.allure .allure-content table.table > tbody > tr.tr {margin-left:0;margin-right:0}
+ /* 2. Form labels read left-aligned above their fields. */
+ body.allure .allure-content .cbi-value-title,
+ body.allure .allure-content .cbi-value label {text-align:left !important}
+ /* 3. Syslog-style inline filter rows: one control per line, label + field together. */
+ body.allure .allure-content div:has(> select.cbi-input-select),
+ body.allure .allure-content div:has(> input.cbi-input-text),
+ body.allure .allure-content div:has(> input[type="text"]),
+ body.allure .allure-content div:has(> input[type="number"]),
+ body.allure .allure-content div:has(> input[type="checkbox"]) {display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+ body.allure .allure-content div:has(> select.cbi-input-select) > select,
+ body.allure .allure-content div:has(> input[type="text"]) > input[type="text"],
+ body.allure .allure-content div:has(> input[type="number"]) > input[type="number"] {flex:1 1 150px;min-width:0;margin:0 !important}
+ /* Log filter rows pack two groups; push the second group onto its own line. */
+ body.allure .allure-content div:has(> select:nth-of-type(2)) > label:nth-of-type(3) {margin-left:auto}
+ /* 4. Diagnostics-style layout tables stack: full-width input, actions underneath. */
+ body.allure .allure-content table.table tr:has(.diag-action) {display:block}
+ body.allure .allure-content table.table td:has(.diag-action) {display:block;padding:10px 12px}
+ body.allure .allure-content table.table td:has(.diag-action) input {width:100% !important;margin:0 0 8px !important}
+ body.allure .allure-content table.table td:has(.diag-action) .diag-action {display:flex;gap:8px;align-items:center}
+ body.allure .allure-content table.table td:has(.diag-action) .diag-action .cbi-dropdown {flex:1 1 auto}
+ body.allure .allure-content table.table td:has(.diag-action) button {white-space:nowrap}
+ /* 5b. Forkop cards: cells never escape the card padding. */
+ body.allure .allure-content table.allure-routing-cards td {margin:0 !important;width:100% !important;box-sizing:border-box}
+ /* 5c. Reset spans exactly the width of the buttons row above it. */
+ body.allure .allure-content .cbi-page-actions .cbi-button-reset {flex:1 1 100%}
+ /* 5d. Tab strips center their buttons when everything fits. */
+ body.allure .allure-content .allure-tabs-centered {justify-content:center}
+ /* 5. Forkop-style routing cards keep their flex card layout (their own block is ≤700px). */
+ /* 6. Table action buttons become compact icon buttons; labels stay for screen readers
+       via title attributes. Icon art is keyed by data-allure-icon set in JS. */
+ body.allure .allure-content :is(td,th) :is(button,.cbi-button)[data-allure-icon] {
+   font-size:0 !important;letter-spacing:0;
+   width:34px !important;min-width:34px !important;max-width:34px;
+   height:34px;padding:0 !important;position:relative;justify-content:center;
+   border-radius:10px;overflow:hidden;
+ }
+ body.allure .allure-content :is(td,th) :is(button,.cbi-button)[data-allure-icon]::before {
+   content:"";display:block;width:17px;height:17px;flex:none;margin:0 auto;
+   background-color:currentColor;opacity:.95;
+   -webkit-mask:var(--al-icon) center / contain no-repeat;
+   mask:var(--al-icon) center / contain no-repeat;
+ }
+ body.allure .allure-content :is(td,th) :is(button,.cbi-button) {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M5 12h.01M12 12h.01M19 12h.01'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="edit"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="trash"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="rotate"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12a9 9 0 1 1-3-6.7M21 3v6h-6'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="reload"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12a9 9 0 1 0 3-6.7M3 3v6h6'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="play"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 4.5 20 12 6 19.5Z'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="stop"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='6' y='6' width='12' height='12' rx='2'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="x"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="hangup"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.7 13.3a16 16 0 0 0 6.3 4.2 2 2 0 0 0 2.6-1.1l1-2.6a2 2 0 0 0-1.2-2.6 12.9 12.9 0 0 0-3.4-.6 2 2 0 0 1-1.9-1.2l-.7-1.6M4.6 4.6 20.4 20.4'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="power"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2v10M18.4 6.6a9 9 0 1 1-12.8 0'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="check"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="download"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v12m-5-5 5 5 5-5M4 21h16'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="upload"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 15V3m-5 5 5-5 5 5M4 21h16'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="gear"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 2v3m0 14v3M2 12h3m14 0h3M4.9 4.9l2.1 2.1m10 10 2.1 2.1M19.1 4.9 17 7m-10 10-2.1 2.1'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="search"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="plus"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E")}
+ body.allure .allure-content :is(td,th) [data-allure-icon="pin"] {--al-icon:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z'/%3E%3Ccircle cx='12' cy='10' r='2.6'/%3E%3C/svg%3E")}
+ /* 7. Tables that overflow horizontally get an always-visible themed scroll pill
+       (the native scrollbar is hidden; the pill tracks the scroll position).
+       Tab strips get the same indicator inline right under the tabs. */
+ body.allure .allure-content .allure-hscroll {scrollbar-width:none}
+ body.allure .allure-content .allure-hscroll::-webkit-scrollbar {display:none}
+ body.allure .allure-content .allure-scrollbar {position:sticky;bottom:10px;z-index:6;height:5px;margin:9px 2px 1px;border-radius:999px;background:var(--v-surface);border:1px solid var(--v-line);overflow:hidden;box-shadow:0 4px 14px rgba(4,6,16,.35)}
+ body.allure .allure-content .allure-scrollbar.allure-scrollbar-inline {position:relative;bottom:auto;margin:5px 2px 2px;box-shadow:none}
+ body.allure .allure-content .allure-scrollbar span {position:absolute;top:0;bottom:0;left:0;width:20%;border-radius:999px;background:linear-gradient(90deg,#748cff,#af91f7);box-shadow:0 0 6px rgba(122,124,255,.35)}
  body.allure .allure-content .forkop-app-tabs {margin-bottom:12px}
 }
 @media (max-width:460px) {
@@ -198,6 +271,11 @@ body.allure .allure-content input[type="file"] {max-width:100%;width:min(100%,36
  body.allure .allure-content table.allure-routing-cards td::before {content:attr(data-allure-label);flex:0 0 35%;font-size:11px;color:var(--v-secondary);font-weight:700;text-align:left}
  body.allure .allure-content table.allure-routing-cards td:last-child::before {flex:1 1 auto}
  body.allure .allure-content table.allure-routing-cards td :is(button,.cbi-button) {max-width:100%;margin:2px 0}
+ /* Keep the card layout authoritative over the later native-table-row rule. */
+ body.allure .allure-content table.allure-routing-cards > tr.tr,
+ body.allure .allure-content table.allure-routing-cards > tbody > tr.tr {display:block !important;margin-left:0;margin-right:0}
+ body.allure .allure-content table.allure-routing-cards td {display:flex !important;white-space:normal !important;text-align:left !important;gap:8px}
+ body.allure .allure-content table.allure-routing-cards td:last-child {justify-content:flex-end}
 }
 /* Process/service tables sometimes have unlabeled button cells. Give those
    action clusters intrinsic space; don't force a separate column into grids. */

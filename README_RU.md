@@ -54,11 +54,3 @@ uci commit luci
 - https://github.com/openwrt/luci
 
 Вся оригинальная разметка LuCI и RPC, кнопки, события и отправка форм остаются под управлением OpenWrt.
-
-## Поддержать проект
-
-Тема бесплатна и развивается в свободное время. Если она вам полезна, лучшая благодарность — звезда и донат:
-
-<p align="center">
-  <a href="https://pay.cloudtips.ru/p/22326183"><img alt="Support the project" src="https://img.shields.io/badge/%E2%9D%A4%EF%B8%8F_Support_the_project-CloudTips-8b5cf6?style=for-the-badge"></a>
-</p>
