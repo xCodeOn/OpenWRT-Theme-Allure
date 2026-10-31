@@ -33,7 +33,44 @@
     if (media.addEventListener) media.addEventListener('change', changed);
     else if (media.addListener) media.addListener(changed);
   }
+
+  /* Some app views render every tab section flat inside .cbi-map-tabbed and
+     only hide the inner content, leaving empty bordered shells stacked above
+     the active tab. Hide each inactive data-tab section outright; the active
+     one stays exactly as the app rendered it. */
+  function syncTabbedSections() {
+    var root = document.getElementById('maincontent');
+    if (!root) return;
+    root.querySelectorAll('.cbi-map').forEach(function(map) {
+      var menu = null;
+      map.querySelectorAll('.cbi-tabmenu').forEach(function(m) {
+        if (!menu && m.querySelector('li.cbi-tab[data-tab]')) menu = m;
+      });
+      var body = map.querySelector('.cbi-map-tabbed');
+      if (!menu || !body) return;
+      var active = menu.querySelector('li.cbi-tab[data-tab]');
+      var name = active ? active.getAttribute('data-tab') : null;
+      body.querySelectorAll(':scope > .cbi-section[data-tab]').forEach(function(sec) {
+        sec.hidden = !!name && sec.getAttribute('data-tab') !== name;
+      });
+    });
+  }
+  var syncPending = false;
+  function scheduleSync() {
+    if (syncPending) return;
+    syncPending = true;
+    requestAnimationFrame(function(){ syncPending = false; syncTabbedSections(); });
+  }
+  function watchTabbedSections() {
+    var root = document.getElementById('maincontent');
+    if (!root || typeof MutationObserver === 'undefined') return;
+    new MutationObserver(scheduleSync).observe(root, {
+      childList: true, subtree: true, attributes: true, attributeFilter: ['class']
+    });
+    scheduleSync();
+  }
+
   if (document.readyState === 'loading')
-    document.addEventListener('DOMContentLoaded', function(){ apply(getMode()); if (window.AllureI18n) window.AllureI18n.translate(document.body); });
-  else { apply(getMode()); if (window.AllureI18n) window.AllureI18n.translate(document.body); }
+    document.addEventListener('DOMContentLoaded', function(){ apply(getMode()); if (window.AllureI18n) window.AllureI18n.translate(document.body); watchTabbedSections(); });
+  else { apply(getMode()); if (window.AllureI18n) window.AllureI18n.translate(document.body); watchTabbedSections(); }
 })();

@@ -129,13 +129,23 @@ return baseclass.extend({
     const onDash=current[1]==='status'&&current[2]==='allure';
     document.querySelector('.allure-home')?.classList.toggle('is-current',onDash);
     let pageTitle=onDash?translated('Control Center'):'';
+    /* Pages that LuCI dispatches through a default child (logs→syslog,
+       realtime→load, firewall→zones) have a requestpath longer than the
+       sidebar node route. Match by prefix and keep only the deepest hit for
+       the breadcrumb and the active highlight, so parents never steal it. */
+    let bestLen=0;const matchedLinks=[];
     const appendItem=(parent,node,parentRoute,depth)=>{
       if (node.name==='allure') return;
-      const route=parentRoute.concat(node.name), selected=current.length===route.length&&activeUnder(route,current);
-      if(selected)pageTitle=translated(node.title);
+      const route=parentRoute.concat(node.name), matched=activeUnder(route,current);
+      if (matched) {
+        matchedLinks.push({link:null,len:route.length});
+        if (route.length>=bestLen){bestLen=route.length;pageTitle=translated(node.title);}
+      }
+      const selected=matched&&route.length===bestLen;
       const nested=depth<3?ui.menu.getChildren(node).filter(n=>n.name!=='allure'):[];
       const holder=E('div',{'class':'allure-nav-entry'});
       const link=E('a',{'class':'allure-nav-link depth-'+depth+(selected?' active':''),'href':L.url.apply(L,route)});
+      if (matched) matchedLinks[matchedLinks.length-1].link=link;
       const glyph=E('span',{'class':'allure-menu-symbol'},[svgFor(iconKey(node))]);
       link.appendChild(glyph);link.appendChild(E('span',{'class':'allure-nav-text'},[translated(node.title)]));
       holder.appendChild(link);
@@ -153,6 +163,17 @@ return baseclass.extend({
       parent.appendChild(holder);
     };
     ui.menu.getChildren(admin).forEach((section,i)=>{
+      /* Log out is a plain one-click button, not a collapsible group. */
+      if (section.name==='logout') {
+        const lg=E('section',{'class':'allure-nav-group allure-nav-logout'});
+        const lgKids=ui.menu.getChildren(section);
+        const lgRoute=lgKids.length?['admin',section.name,lgKids[0].name]:['admin',section.name];
+        lg.append(E('a',{'class':'allure-nav-link allure-logout','href':L.url.apply(L,lgRoute)},[
+          E('span',{'class':'allure-menu-symbol'},[svgFor('logout')]),
+          E('span',{'class':'allure-nav-text'},[translated(section.title)])
+        ]));
+        nav.appendChild(lg);return;
+      }
       const group=E('section',{'class':'allure-nav-group'});
       const sectionRoute=['admin',section.name];
       const isActive=activeUnder(sectionRoute,current);
@@ -173,6 +194,8 @@ return baseclass.extend({
       header.addEventListener('click',()=>setOpen(body.hidden,true));
       group.append(header,body);nav.appendChild(group);setOpen(expand,false);
     });
+    /* Final pass: keep the active class only on the deepest matched route. */
+    matchedLinks.forEach(({link,len})=>{if(link)link.classList.toggle('active',len===bestLen);});
     if(title&&pageTitle) title.textContent=pageTitle;
   }
 });

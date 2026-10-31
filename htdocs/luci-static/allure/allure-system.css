@@ -84,15 +84,46 @@ body.allure .allure-content :is(.cbi-page-actions,.form-actions) {display:flex;a
    Do not set width:100% on .td/.th, do not set .table display:block or alter child layout. */
 body.allure .allure-content .table {max-width:100%;min-width:0;color:var(--v-text);background:transparent;border:1px solid var(--v-line);border-radius:13px}
 body.allure .allure-content .table > .tr {display:flex;align-items:stretch;max-width:100%;min-width:0;background:transparent}
-body.allure .allure-content .table > .tr > :is(.th,.td) {box-sizing:border-box;min-width:0;max-width:none;padding:12px 12px;border-bottom:1px solid var(--v-line);background:transparent;color:var(--v-text);font-size:12px;line-height:1.55;white-space:normal;overflow-wrap:break-word;vertical-align:middle}
+body.allure .allure-content .table > .tr > :is(.th,.td) {box-sizing:border-box;flex:1 1 auto;min-width:0;max-width:none;padding:12px 12px;border-bottom:1px solid var(--v-line);background:transparent;color:var(--v-text);font-size:12px;line-height:1.55;white-space:normal;overflow-wrap:break-word;vertical-align:middle}
 body.allure .allure-content .table > .tr.table-titles > .th,
 body.allure .allure-content .table > .tr.cbi-section-table-titles > .th {font-size:11px;font-weight:750;color:var(--v-secondary);background:var(--v-surface);letter-spacing:.1px}
 body.allure .allure-content .table > .tr:last-child > .td {border-bottom:0}
 body.allure .allure-content .table > .tr:hover:not(.table-titles):not(.cbi-section-table-titles) {background:color-mix(in srgb,var(--v-accent) 4%,transparent)}
 /* Actions must keep all buttons in one field and wrap. No absolute positioning. */
-body.allure .allure-content .table > .tr > .td.cbi-section-actions {display:flex;align-items:center;justify-content:flex-end;align-content:center;gap:6px;flex-wrap:wrap;min-width:185px;max-width:360px;white-space:normal}
+body.allure .allure-content .table > .tr > .td.cbi-section-actions {display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:nowrap;min-width:185px;white-space:nowrap}
 body.allure .allure-content .td.cbi-section-actions > :is(div,span,form) {display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-width:0;max-width:100%;margin:0}
 body.allure .allure-content .td.cbi-section-actions .cbi-button {min-height:33px;padding:6px 10px;font-size:11.5px}
+/* Native <table class="table"> (cbi-section-table): restore real table geometry.
+   Flex rows size every cell per-row, which scatters columns; native layout puts
+   headers and data into straight shared columns sized by content. */
+body.allure .allure-content table.table {border-collapse:collapse;border-spacing:0}
+body.allure .allure-content table.table > tr.tr,
+body.allure .allure-content table.table > tbody > tr.tr {display:table-row}
+body.allure .allure-content table.table > tr.tr > :is(td.td,th.th),
+body.allure .allure-content table.table > tbody > tr.tr > :is(td.td,th.th) {display:table-cell;flex:none}
+/* Key-value and data cells read left-to-right; keep LuCI's own alignment helpers. */
+body.allure .allure-content table.table :is(td.td,th.th) {text-align:left}
+body.allure .allure-content table.table :is(td.td,th.th).center {text-align:center}
+body.allure .allure-content table.table :is(td.td,th.th).right {text-align:right}
+/* Progress bars (memory, storage, load): thick pill with the value centered inside. */
+body.allure .allure-content .cbi-progressbar {position:relative;height:21px;min-width:220px;border-radius:999px;overflow:hidden;background:var(--al-input);border:1px solid var(--v-line);font-size:0;line-height:0}
+body.allure .allure-content .cbi-progressbar > div {position:absolute;top:0;left:0;bottom:0;height:100%;background:linear-gradient(90deg,#748cff,#af91f7);border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+body.allure .allure-content .cbi-progressbar::before {content:attr(title);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 12px;font-size:11px;line-height:1;font-weight:680;letter-spacing:.2px;color:var(--v-text);text-shadow:0 1px 2px rgba(8,10,22,.45);z-index:1;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+:root[data-darkmode="false"] body.allure .allure-content .cbi-progressbar::before {color:var(--v-text);text-shadow:none}
+/* Section title row: flex so the Hide/Active indicator chip sits with breathing room. */
+body.allure .allure-content .cbi-section > h3:first-child,
+body.allure .allure-content .cbi-section > h4:first-child {display:flex;align-items:center;gap:12px}
+body.allure .allure-content .cbi-section > :is(h3,h4) > .label {margin-left:auto;min-width:0;padding:5px 13px;border-radius:999px;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:780;border:1px solid var(--v-line);background:var(--v-surface);color:var(--v-secondary);cursor:default;transition:color .17s,border-color .17s,background .17s}
+body.allure .allure-content .cbi-section > :is(h3,h4) > .label[data-clickable="true"] {cursor:pointer}
+body.allure .allure-content .cbi-section > :is(h3,h4) > .label[data-clickable="true"]:hover {color:var(--v-accent);border-color:var(--v-accent);background:var(--v-accent-soft)}
+/* Native dropdowns in theme style: custom chevron, themed frame, dark popup via color-scheme. */
+body.allure .allure-content select:not([multiple]):not([size]) {appearance:none;-webkit-appearance:none;padding-right:34px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1.5 1.75 6 6.25l4.5-4.5' fill='none' stroke='%238a92a8' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+/* Modals: themed panel over a blurred scrim. */
+body.allure #modal_overlay {background:rgba(6,9,20,.55);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+:root[data-darkmode="false"] body.allure #modal_overlay {background:rgba(38,42,66,.35)}
+body.allure .modal {background:var(--v-panel);color:var(--v-text);border:1px solid var(--v-line);border-radius:18px;box-shadow:var(--v-shadow);padding:20px}
+body.allure .modal h4 {font-size:15px;font-weight:750;letter-spacing:-.2px;color:var(--v-text);margin:0 0 12px;padding:0 0 11px;border-bottom:1px solid var(--v-line)}
+body.allure .modal p, body.allure .modal li {color:var(--v-secondary);font-size:13px}
 /* Native tables retain table geometry, with optional safe horizontal scroll at narrow widths. */
 body.allure .allure-content table:not(.table) {width:100%;max-width:100%;border-spacing:0;border-collapse:collapse;color:var(--v-text);font-size:12.5px}
 body.allure .allure-content table:not(.table) :is(th,td) {padding:12px 13px;vertical-align:middle;line-height:1.5;text-align:left;border-bottom:1px solid var(--v-line)}
@@ -120,11 +151,19 @@ body.allure .allure-content :is(button,input,select,textarea,a):focus-visible {o
  body.allure .allure-content :is(.cbi-section,.cbi-section-node,.cbi-tabcontainer) > .cbi-value > .cbi-value-title {display:block;width:auto;padding:0 0 7px}
  body.allure .allure-content :is(.cbi-section,.cbi-section-node,.cbi-tabcontainer) > .cbi-value > .cbi-value-field {width:100%;max-width:100%}
  body.allure .allure-content .cbi-page-actions :is(button,.cbi-button,.btn) {min-height:39px;flex:1 1 auto}
- body.allure .allure-content .table:not([data-allure-fixed]):not(.allure-noscroll) {overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+ body.allure .allure-content .table:not([data-allure-fixed]):not(.allure-noscroll) {display:block;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
  body.allure .allure-content .table > .tr {min-width:575px;max-width:none}
  body.allure .allure-content .table > .tr > .td.cbi-section-actions {min-width:165px}
  body.allure .allure-content table:not(.table) {display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
  body.allure .allure-content table:not(.table) :is(td,th) {white-space:nowrap}
+ /* Action clusters stay on one line; the scrollable table absorbs the width. */
+ body.allure .allure-content table:not(.table) td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) {white-space:nowrap}
+ body.allure .allure-content table:not(.table) td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) > :is(div,span,form) {display:flex;flex-wrap:nowrap;align-items:center;gap:8px;white-space:nowrap}
+ body.allure .allure-content table.table td.cbi-section-actions {white-space:nowrap}
+ body.allure .allure-content table.table td.cbi-section-actions > :is(div,span,form) {display:flex;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:8px;white-space:nowrap}
+ /* LuCI .controls rows (package manager filters/actions) may not overflow their card. */
+ body.allure .allure-content .controls {flex-wrap:wrap;row-gap:8px}
+ body.allure .allure-content .controls .control-group {flex-wrap:wrap;max-width:100%}
  body.allure .allure-content .forkop-app-tabs {margin-bottom:12px}
 }
 @media (max-width:460px) {
@@ -164,8 +203,12 @@ body.allure .allure-content input[type="file"] {max-width:100%;width:min(100%,36
    action clusters intrinsic space; don't force a separate column into grids. */
 @media(min-width:821px){
  body.allure .allure-content .table > .tr > .td:last-child:has(> .cbi-button:nth-child(2)) {
-   display:flex;align-items:center;align-content:center;justify-content:flex-end;
-   flex:2 1 270px;flex-wrap:wrap;gap:6px;min-width:235px;max-width:370px;
+   display:flex;align-items:center;justify-content:flex-end;
+   flex:2 1 270px;flex-wrap:nowrap;gap:6px;min-width:235px;
+ }
+ /* Rows carrying three or more actions get extra share so the cluster stays on one line. */
+ body.allure .allure-content .table > .tr > .td:last-child:has(> .cbi-button:nth-child(3)) {
+   flex:3 1 300px;
  }
  body.allure .allure-content .table > .tr > .td:last-child:has(> .cbi-button:nth-child(2)) .cbi-button {
    padding:6px 9px;font-size:11px;min-height:32px;
@@ -178,12 +221,15 @@ body.allure .allure-content input[type="file"] {max-width:100%;width:min(100%,36
  body.allure .allure-content table:not(.table) td:last-child:has(> button + button),
  body.allure .allure-content table:not(.table) td:last-child:has(> form + form),
  body.allure .allure-content table:not(.table) td:last-child:has(> div + div),
+ body.allure .allure-content table:not(.table) td:last-child:has(> div > .cbi-button + .cbi-button),
+ body.allure .allure-content table:not(.table) td:last-child:has(> div > button + button),
+ body.allure .allure-content table:not(.table) td:last-child:has(> div > form + form),
  body.allure .allure-content .network-status-table td:last-child:has(.cbi-button + .cbi-button),
  body.allure .allure-content .network-status-table td:last-child:has(form + form),
  body.allure .allure-content .ifacebox td:last-child:has(.cbi-button + .cbi-button),
  body.allure .allure-content .ifacebox td:last-child:has(form + form) {
-   display:flex;flex-direction:row;align-items:center;align-content:center;justify-content:flex-end;
-   flex-wrap:wrap;gap:8px;min-width:220px;white-space:normal;
+   display:flex;flex-direction:row;align-items:center;justify-content:flex-end;
+   flex-wrap:nowrap;gap:8px;min-width:220px;white-space:nowrap;
  }
  body.allure .allure-content table:not(.table) td:last-child:has(> .cbi-button + .cbi-button) > :is(div,span,form),
  body.allure .allure-content table:not(.table) td:last-child:has(> button + button) > :is(div,span,form),
@@ -193,8 +239,24 @@ body.allure .allure-content input[type="file"] {max-width:100%;width:min(100%,36
  body.allure .allure-content .network-status-table td:last-child:has(form + form) > :is(div,span,form),
  body.allure .allure-content .ifacebox td:last-child:has(.cbi-button + .cbi-button) > :is(div,span,form),
  body.allure .allure-content .ifacebox td:last-child:has(form + form) > :is(div,span,form) {
-   display:flex;flex-direction:row;align-items:center;align-content:center;justify-content:flex-end;
-   flex-wrap:wrap;gap:8px;min-width:0;max-width:100%;margin:0;
+   display:flex;flex-direction:row;align-items:center;justify-content:flex-end;
+   flex-wrap:nowrap;gap:8px;min-width:0;max-width:100%;margin:0;
+ }
+ /* Interface-style cells wrap all buttons in one inner div; keep that single
+    wrapper on one line as well. */
+ body.allure .allure-content table:not(.table) td:last-child:has(> div > .cbi-button + .cbi-button) > div,
+ body.allure .allure-content table:not(.table) td:last-child:has(> div > button + button) > div,
+ body.allure .allure-content table:not(.table) td:last-child:has(> div > form + form) > div {
+   display:flex;flex-direction:row;align-items:center;justify-content:flex-end;
+   flex-wrap:nowrap;gap:8px;min-width:0;margin:0;
+ }
+ /* Native <table class="table"> (cbi-section-table) keeps table-cell geometry,
+    so its action cells need their own one-line treatment: the inner wrapper
+    becomes a nowrap flex row and the column grows to fit it. */
+ body.allure .allure-content table.table td.cbi-section-actions {white-space:nowrap}
+ body.allure .allure-content table.table td.cbi-section-actions > :is(div,span,form) {
+   display:flex;flex-direction:row;align-items:center;justify-content:flex-end;
+   flex-wrap:nowrap;gap:8px;min-width:0;margin:0;
  }
  body.allure .allure-content table:not(.table) td:last-child:has(> .cbi-button + .cbi-button) :is(button,.cbi-button,.btn),
  body.allure .allure-content table:not(.table) td:last-child:has(> button + button) :is(button,.cbi-button,.btn),
@@ -218,3 +280,49 @@ body.allure .allure-content :is(.cbi-button.cbi-button-apply,.cbi-button.cbi-but
 body.allure .allure-content :is(.cbi-button.cbi-button-apply,.cbi-button.cbi-button-save,.cbi-button.cbi-button-positive,.btn.btn-primary,.btn.btn-success):hover:not(:disabled){background:color-mix(in srgb,var(--v-accent) 89%,white);border-color:var(--v-accent);color:#fff}
 body.allure .allure-content :is(.cbi-button.cbi-button-negative,.cbi-button.cbi-button-remove,.cbi-button.cbi-button-reset,.btn.btn-danger){background:transparent;color:var(--al-bad);border-color:color-mix(in srgb,var(--al-bad) 45%,var(--v-line))}
 body.allure .allure-content .cbi-button.cbi-button-add{color:var(--al-good);background:transparent;border-color:color-mix(in srgb,var(--al-good) 45%,var(--v-line))}
+
+/* Action cells in NATIVE tables must stay real table-cells: turning the td into
+   a flex box breaks table column negotiation and its buttons overlap the
+   previous column (Process list "Memory" text was lost under "Hang Up").
+   nowrap keeps the cluster on one line; the column grows to fit it. */
+@media(min-width:821px){
+ body.allure .allure-content table td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)),
+ body.allure .allure-content .network-status-table td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)),
+ body.allure .allure-content .ifacebox td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) {
+   display: table-cell !important;
+   white-space: nowrap;
+   text-align: right;
+   vertical-align: middle;
+ }
+ body.allure .allure-content table td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) > :is(div,span,form),
+ body.allure .allure-content .network-status-table td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) > :is(div,span,form) {
+   display: flex; flex-direction: row; align-items: center; justify-content: flex-end;
+   flex-wrap: nowrap; gap: 6px;
+ }
+ body.allure .allure-content table td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) :is(.cbi-button,button),
+ body.allure .allure-content .network-status-table td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) :is(.cbi-button,button) { margin: 0; flex: 0 0 auto; }
+}
+/* Every native dropdown wears the theme, even inside app pages that ship their own CSS. */
+body.allure .allure-content select.cbi-input-select,
+body.allure .allure-content select:not([multiple]):not([size]) {
+  font-family: inherit !important;
+  font-size: 13px !important;
+  min-height: var(--al-field-height) !important;
+  padding: 9px 34px 9px 12px !important;
+  border: 1px solid var(--v-line) !important;
+  border-radius: var(--al-r-sm) !important;
+  background-color: var(--al-input) !important;
+  color: var(--v-text) !important;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1.5 1.75 6 6.25l4.5-4.5' fill='none' stroke='%238a92a8' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+}
+/* Modals: centered in both axes over the blurred scrim. */
+body.allure #modal_overlay { display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; }
+body.allure #modal_overlay .modal { margin: 0; max-height: 88vh; overflow-y: auto; flex: 0 1 auto; }
+/* Package manager control rows: label + control grouped into soft cards. */
+body.allure .allure-content .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; margin: 0 0 16px; }
+body.allure .allure-content .controls > div { flex: 1 1 270px; min-width: 0; margin: 0; padding: 13px 15px 15px; border: 1px solid var(--v-line); border-radius: 13px; background: var(--v-surface); }
+body.allure .allure-content .controls label { display: block; font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 780; color: var(--v-muted); margin: 0 0 9px; }
+body.allure .allure-content .controls .control-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+body.allure .allure-content .controls .control-group input { flex: 1 1 150px; min-width: 0; }
