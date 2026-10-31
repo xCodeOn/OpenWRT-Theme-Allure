@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" width="300" height="64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#5068ff"/>
+      <stop offset="1" stop-color="#a999ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="#121426"/>
+  <path d="M13 19h12l7 24 7-24h12L38 50H26z" fill="url(#g)"/>
+  <circle cx="48" cy="14" r="5" fill="#9ee7d9"/>
+  <text x="78" y="42" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#e6e9ff" letter-spacing="0.5">Allure</text>
+  <text x="80" y="57" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#8b90b5" letter-spacing="1">LuCI THEME</text>
+</svg>

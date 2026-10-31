@@ -1,44 +1,93 @@
-# Allure Router UI — LuCI theme for OpenWrt 25.x
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="allure-logo.svg">
+    <img src="allure-logo.svg" width="300" alt="Allure — LuCI theme">
+  </picture>
+</p>
 
-**Allure** is a full LuCI theme inspired by modern macOS desktop aesthetics: soft panels, a translucent top bar, sidebar navigation, accent charts, and light / dark / auto modes. Built for the current `ucode`-based LuCI on OpenWrt 25.12+.
+<p align="center"><b>macOS-inspired LuCI theme for OpenWrt 25.x.</b><br>
+Soft glass panels · translucent top bar · sidebar navigation · accent charts · light / dark / auto</p>
 
-![Dark](preview/screenshots/Allure_Dark_Screenshot.png)
-![Light](preview/screenshots/Allure_Light_Screenshot.png)
-![Mobile](preview/screenshots/Allure_Mobile_Screenshot.png)
+<p align="center">
+  <b>English</b> · <a href="README_RU.md">Русский</a>
+</p>
 
-## Features
+<p align="center">
+  <a href="https://github.com/xCodeOn/OpenWRT-Theme-Allure/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/xCodeOn/OpenWRT-Theme-Allure?style=flat-square"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/xCodeOn/OpenWRT-Theme-Allure?style=flat-square"></a>
+  <a href="https://github.com/xCodeOn/OpenWRT-Theme-Allure/actions/workflows/build.yml"><img alt="Build" src="https://img.shields.io/github/actions/workflow/status/xCodeOn/OpenWRT-Theme-Allure/build.yml?branch=main&style=flat-square&label=build"></a>
+  <img alt="Platform" src="https://img.shields.io/badge/OpenWrt%2025.12%2B-aarch64%20%7C%20all-5068ff?style=flat-square">
+  <a href="https://github.com/xCodeOn/OpenWRT-Theme-Allure/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/xCodeOn/OpenWRT-Theme-Allure?style=flat-square&color=9ee7d9"></a>
+</p>
 
-- Native LuCI navigation (forms, network, wireless, firewall and every installed app) — no router configuration is replaced.
-- Dashboard at **Status → Allure Dashboard**; the Allure logo links to it.
-- Real download/upload graphs (polled every 3 s): native `luci.getRealtimeStats`, fallback to `network.device status`.
-- WAN selection via `network.interface dump`, auto-detected device, IPv4 address and link state.
-- RAM usage, load average, uptime, traffic since last reboot.
-- Temperatures only from real sensors in `/sys/class/thermal` and `/sys/class/hwmon`; missing sensors are never faked. Wi-Fi temperature depends on kernel support.
-- Light / Dark / Auto switching (stored in browser `localStorage`).
-- Adaptive mobile sidebar.
-- No CDN, third-party fonts, external libraries, trackers or background daemons.
+<p align="center">
+  <a href="https://pay.cloudtips.ru/p/22326183"><img alt="Support the project" src="https://img.shields.io/badge/%E2%9D%A4%EF%B8%8F_Support_the_project-CloudTips-8b5cf6?style=for-the-badge"></a>
+</p>
 
-## Compatibility
+<p align="center">
+  <img src="preview/screenshots/Allure_Dark_Screenshot.png" width="640" alt="Allure dashboard — dark mode">
+</p>
+<p align="center"><i>Status → Allure Dashboard — real traffic graphs, memory, load and sensors.</i></p>
 
-Target: **OpenWrt 25.12+** with the modern `ucode` LuCI, including the Cudy TR3000 v1 line (Filogic MT7981). What matters is the installed OpenWrt/LuCI version — not device RAM. Not intended for factory CudyOS or legacy Lua `.htm` themes. This is **not a firmware** — it installs on top of OpenWrt.
+## Screenshots
 
-Dependencies: `luci-base`, `luci-mod-status`, `luci-theme-bootstrap`, `rpcd-mod-ucode`. Bootstrap is required as the base stylesheet for complex LuCI forms; Allure restyles everything with its own CSS.
+<p align="center">
+  <a href="preview/screenshots/Allure_Dark_Screenshot.png"><img src="preview/screenshots/Allure_Dark_Screenshot.png" width="49%" alt="Dark theme"></a>
+  <a href="preview/screenshots/Allure_Light_Screenshot.png"><img src="preview/screenshots/Allure_Light_Screenshot.png" width="49%" alt="Light theme"></a>
+  <a href="preview/screenshots/Allure_Mobile_Screenshot.png"><img src="preview/screenshots/Allure_Mobile_Screenshot.png" width="31%" alt="Mobile adaptive sidebar"></a>
+</p>
+
+## What you get
+
+| | |
+|---|---|
+| **Native LuCI** | Forms, network, wireless, firewall and every installed app — no router configuration is replaced |
+| **Dashboard** | Status → Allure Dashboard; real download/upload graphs (every 3 s), WAN status, RAM, load, uptime, traffic |
+| **Sensors** | Temperatures only from real thermal/hwmon sensors (`/sys/class/thermal`, `/sys/class/hwmon`) — never faked |
+| **Themes** | Light / Dark / Auto, remembered per browser (`localStorage`) — including an animated login screen |
+| **Navigation** | Sidebar with built-in SVG icons, collapsible sections, adaptive mobile panel |
+| **Localization** | RU/EN follows LuCI language (auto-detects browser language) — Russian units and number formats |
+| **Layout** | Global styling of forms, tables, tabs, modals and dropdowns; mobile-optimized cards and horizontal table scroll |
+| **Privacy** | No CDN, third-party fonts, external libraries, trackers or background daemons |
+| **Package** | Builds as `.apk` (OpenWrt 25.12+) and `.ipk` (opkg) — `all` architecture |
+
+## Quick start
+
+Wire the theme on an OpenWrt 25.12+ router (apk), e.g. Cudy TR3000:
+
+```bash
+wget -O /tmp/allure.apk https://github.com/xCodeOn/OpenWRT-Theme-Allure/releases/latest/download/luci-theme-allure-2.0.3-r1.apk
+apk add --allow-untrusted /tmp/allure.apk
+
+uci set luci.main.mediaurlbase='/luci-static/allure'
+uci commit luci
+rm -f /tmp/luci-indexcache
+/etc/init.d/rpcd restart
+/etc/init.d/uhttpd reload
+```
+
+Then reload the LuCI page without cache (Ctrl+Shift+R) — open **Status → Allure Dashboard**.
+
+### Requirements
+
+- **OpenWrt 25.12+** with the modern `ucode` LuCI (Cudy TR3000 v1 / Filogic MT7981 and similar).
+- Dependencies (installed automatically by apk): `luci-base`, `luci-mod-status`, `luci-theme-bootstrap`, `rpcd-mod-ucode`.
+- This is **not a firmware** — it installs on top of OpenWrt. Not for factory CudyOS or legacy Lua `.htm` themes.
 
 ## Installation
 
-### From a release (prebuilt `.ipk`, opkg/OpenWrt ≤ 23.05)
+### From a release (`.ipk`, opkg / OpenWrt ≤ 23.05)
 
 ```sh
 opkg update
-opkg install luci-theme-allure_1.0.0_all.ipk
-# enable the theme
+opkg install luci-theme-allure_2.0.3_all.ipk
 uci set luci.main.mediaurlbase='/luci-static/allure'
 uci commit luci
 rm -f /tmp/luci-indexcache
 /etc/init.d/uhttpd reload
 ```
 
-### Manual install from source (OpenWrt 25.12+ / apk)
+### From source
 
 ```sh
 scp -r Allure_Router_OpenWrt25 root@192.168.1.1:/tmp/
@@ -49,8 +98,6 @@ cd /tmp/Allure_Router_OpenWrt25
 sh install.sh
 ```
 
-Then reload the browser page without cache and open **Status → Allure Dashboard** (`/cgi-bin/luci/admin/status/allure` after login).
-
 ### Rollback
 
 ```sh
@@ -60,18 +107,17 @@ rm -f /tmp/luci-indexcache
 /etc/init.d/uhttpd reload
 ```
 
-Or, from the source folder: `sh uninstall.sh`.
+## Building the package
 
-## Building a package (OpenWrt buildroot)
+Via the official OpenWrt buildroot / SDK (the same `Makefile` ships in `ci/luci-theme-allure/`):
 
 ```sh
 cp -r Allure_Router_OpenWrt25 /path/to/openwrt/feeds/luci/themes/luci-theme-allure
-# in the OpenWrt buildroot with the LuCI feed configured:
 make menuconfig   # LuCI → Themes → luci-theme-allure
 make package/feeds/luci/luci-theme-allure/compile V=s
 ```
 
-Package format on OpenWrt 25.12 is **.apk** (built by the SDK; the prebuilt `.ipk` in releases targets opkg-based systems).
+A GitHub Actions workflow (`.github/workflows/build.yml`) builds `.apk`/`.ipk` on every release automatically.
 
 ## Checks
 
@@ -82,17 +128,14 @@ ubus call luci.allure sensors
 
 If `ubus list` does not show `luci.allure`, ensure `rpcd-mod-ucode` is installed and restart `/etc/init.d/rpcd`.
 
-## Contents
+## Support the project
 
-- `ucode/template/themes/allure/` — LuCI header/footer templates.
-- `htdocs/luci-static/allure/` — CSS, JS, SVG icon.
-- `htdocs/luci-static/resources/menu-allure.js` — native sidebar navigation.
-- `htdocs/luci-static/resources/view/status/allure.js` — LuCI dashboard view.
-- `root/usr/share/rpcd/ucode/allure.uc` — read-only RPC service for sensors.
-- `root/usr/share/rpcd/acl.d/` — read-only ACLs.
-- `root/usr/share/luci/menu.d/` — menu registration.
-- `preview/` — standalone HTML demo with **fake data** for screenshots.
+The theme is free and made in spare time. If it is useful to you, a star and a donation are the best thanks:
+
+<p align="center">
+  <a href="https://pay.cloudtips.ru/p/22326183"><img alt="Support the project" src="https://img.shields.io/badge/%E2%9D%A4%EF%B8%8F_Support_the_project-CloudTips-8b5cf6?style=for-the-badge"></a>
+</p>
 
 ## License
 
-Apache-2.0. Allure source is original; Bootstrap is reused through the separately installed dependency.
+[Apache-2.0](LICENSE).
