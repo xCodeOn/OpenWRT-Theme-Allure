@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html data-darkmode="true" lang="ru"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Allure 2.0 — Тест system</title>
+<script>
+(function(){var p=new URLSearchParams(location.search);document.documentElement.lang=p.get('lang')||((navigator.language||'en').toLowerCase().startsWith('ru')?'ru':'en');var mode=p.get('theme');if(mode==='dark'||mode==='light'||mode==='auto')try{localStorage.setItem('allure:appearance',mode)}catch(e){} })();
+</script>
+<script src="../htdocs/luci-static/allure/allure-i18n.js"></script><link href="../htdocs/luci-static/allure/allure.css" rel="stylesheet"/><script defer="" src="../htdocs/luci-static/allure/allure-ui.js"></script><link href="../htdocs/luci-static/allure/allure-system.css?v=2.0.0" rel="stylesheet"/><style>
+/* Test harness: structural LuCI CBI flex primitives (not shipped to router). */
+.table>.tr{display:flex;align-items:stretch}
+.table>.tr>.td,.table>.tr>.th{flex:1 1 0;min-width:0}
+.table>.tr>.td.col-2,.table>.tr>.th.col-2{flex:2 2 80px}
+.table>.tr>.td.col-3,.table>.tr>.th.col-3{flex:3 3 110px}
+.table>.tr>.td.col-4,.table>.tr>.th.col-4{flex:4 4 150px}
+.table>.tr>.td.col-5,.table>.tr>.th.col-5{flex:5 5 190px}
+.table>.tr>.td.col-6,.table>.tr>.th.col-6{flex:6 6 230px}
+.allure-lab-head{display:flex;align-items:center;gap:11px;margin:0 0 12px}
+.allure-lab-head h2{margin:0!important}
+.allure-lab-status{color:#42c7a1;font-size:12px}
+.allure-demo-forkop{width:100%;min-height:0}
+.lab-action-strip{display:flex;gap:8px;flex-wrap:wrap}
+.lab-figure{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0}
+.lab-figure>div{padding:18px;border-radius:14px;border:1px solid var(--v-line);background:var(--v-panel)}
+.lab-figure strong{font-size:23px;display:block;letter-spacing:-.4px}
+.lab-figure span{font-size:12px;color:var(--v-secondary)}
+@media(max-width:620px){.lab-figure{grid-template-columns:1fr}}
+</style><script defer src="../htdocs/luci-static/allure/allure-routing-cards.js?v=2.0.0"></script></head>
+<body class="allure"><div class="allure-shell">
+<aside class="allure-sidebar" id="allure-sidebar"><a class="allure-brand" href="#"><span class="allure-brand-logo"><span class="allure-brand-orb"></span></span><span class="allure-brand-type"><strong>allure<span class="allure-brand-period">.</span></strong><small>ROUTER CONTROL</small></span></a>
+<div class="allure-sidebar-caption">WORKSPACE <span>01</span></div><a class="allure-home" href="#"><span class="allure-nav-glyph">◈</span><span>Dashboard</span><span class="allure-nav-arrow">↗</span></a>
+<nav aria-label="Router navigation" class="allure-nav" id="allure-nav">
+<section class="allure-nav-group"><button aria-expanded="false" class="allure-nav-heading" type="button"><span class="allure-heading-icon" data-demo-icon="activity"></span><span class="allure-heading-label">Status</span><span class="allure-heading-chevron"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></span></button><div class="allure-nav-children" hidden="">
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="layout"></span><span>Overview</span></a>
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="chart"></span><span>Realtime Graphs</span></a>
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="file"></span><span>System Log</span></a></div></section>
+<section class="allure-nav-group"><button aria-expanded="false" class="allure-nav-heading" type="button"><span class="allure-heading-icon" data-demo-icon="network"></span><span class="allure-heading-label">Network</span><span class="allure-heading-chevron"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></span></button><div class="allure-nav-children" hidden="">
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="network"></span><span>Interfaces</span></a>
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="wifi"></span><span>Wireless</span></a>
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="shield"></span><span>Firewall</span></a>
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="search"></span><span>Diagnostics</span></a></div></section>
+<section class="allure-nav-group"><button aria-expanded="false" class="allure-nav-heading" type="button"><span class="allure-heading-icon" data-demo-icon="settings"></span><span class="allure-heading-label">System</span><span class="allure-heading-chevron"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></span></button><div class="allure-nav-children" hidden="">
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="settings"></span><span>Administration</span></a>
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="box"></span><span>Software</span></a>
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="upload"></span><span>Backup / Flash Firmware</span></a></div></section>
+<section class="allure-nav-group"><button aria-expanded="false" class="allure-nav-heading" type="button"><span class="allure-heading-icon" data-demo-icon="layers"></span><span class="allure-heading-label">Services</span><span class="allure-heading-chevron"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></span></button><div class="allure-nav-children" hidden="">
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="globe"></span><span>Dynamic DNS</span></a>
+<a class="allure-nav-link" href="#"><span class="allure-menu-symbol" data-demo-icon="shield"></span><span>Adblock</span></a></div></section>
+</nav><div class="allure-sidebar-foot"><span class="allure-router-icon">◉</span><div><strong>Cudy TR3000</strong><span>OpenWrt 25.12</span></div><span class="allure-connected-dot"></span></div></aside>
+<div class="allure-overlay" id="allure-overlay"></div><div class="allure-workspace"><header class="allure-topbar"><div class="allure-topbar-left"><button class="allure-icon-button allure-mobile" id="allure-menu-button">☰</button><div class="allure-breadcrumb"><span>ROUTER</span><span class="allure-slash">/</span><b id="allure-breadcrumb-title">Система</b></div></div><div class="allure-topbar-right"><span class="allure-online"><span></span> SYSTEM ONLINE</span><div aria-label="Appearance" class="allure-theme-control"><button aria-label="Light mode" data-allure-theme="light" title="Light mode">☼</button><button aria-label="Dark mode" data-allure-theme="dark" title="Dark mode">☾</button><button aria-label="System appearance" data-allure-theme="auto" title="Follow system">◐</button></div><span class="allure-avatar">A</span></div></header>
+<main class="allure-content" id="maincontent"><div class="allure-luci-example" id="view"><h2>Система</h2><ul class="cbi-tabmenu"><li class="cbi-tab"><a href="#">Основные настройки</a></li><li><a href="#">Дополнительно</a></li><li><a href="#">Диагностика</a></li></ul><section class="cbi-section"><h3>Общие настройки</h3><div class="cbi-value"><label class="cbi-value-title">Имя устройства</label><div class="cbi-value-field"><input value="Cudy-TR3000"/></div></div><div class="cbi-value"><label class="cbi-value-title">Часовой пояс</label><div class="cbi-value-field"><select><option>Europe/Amsterdam</option><option>Europe/Moscow</option></select></div></div><div class="cbi-value"><label class="cbi-value-title">Язык</label><div class="cbi-value-field"><select><option>Русский</option><option>English</option></select></div></div><div class="cbi-value"><label class="cbi-value-title">Время сервера</label><div class="cbi-value-field"><input value="pool.ntp.org"/></div></div></section><div class="cbi-page-actions"><button class="cbi-button cbi-button-apply">Применить</button><button class="cbi-button cbi-button-save">Сохранить</button><button class="cbi-button cbi-button-reset">Сбросить</button></div></div></main><footer class="allure-footer"><span>ALLURE UI · OpenWrt LuCI</span><span>ПРЕВЬЮ С ПРИМЕРНЫМИ ДАННЫМИ · НЕ РОУТЕР</span></footer></div></div><script>
+(function(){
+let active=document.querySelector('[data-allure-preview-active]');
+if(active){active.classList.add('active');const g=active.closest('.allure-nav-group');if(g){g.classList.add('expanded');g.querySelector('.allure-nav-children').hidden=false;g.querySelector('.allure-nav-heading').setAttribute('aria-expanded','true')}}
+document.querySelectorAll('.allure-nav-heading').forEach(b=>b.addEventListener('click',()=>{const g=b.closest('.allure-nav-group'),c=g.querySelector('.allure-nav-children'),open=c.hidden;c.hidden=!open;g.classList.toggle('expanded',open);b.setAttribute('aria-expanded',String(open))}));
+document.querySelectorAll('a.allure-nav-link').forEach(a=>{if(!a.dataset.allurePreviewActive){a.addEventListener('click',e=>e.preventDefault())}});
+document.querySelectorAll('.cbi-tabmenu li a,.tabs li a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();a.closest('ul').querySelectorAll('li').forEach(x=>x.classList.remove('cbi-tab','active'));a.parentElement.classList.add('cbi-tab');}));
+document.querySelectorAll('button[data-demo-notice]').forEach(b=>b.addEventListener('click',()=>{document.getElementById('demo-notice').textContent='Демонстрация интерфейса: изменения не отправляются на роутер.';}));
+var theme=new URLSearchParams(location.search).get('theme')||'dark';document.documentElement.dataset.darkmode=String(theme==='dark');document.documentElement.dataset.allureMode=theme;
+document.querySelectorAll('[data-allure-theme]').forEach(b=>b.classList.toggle('selected',b.dataset.allureTheme===theme));
+if(window.AllureI18n){window.AllureI18n.translate(document.body)}
+})();
+</script></body></html>

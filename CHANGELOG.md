@@ -1,5 +1,8 @@
 # Allure Changelog
 
+## 2.1.7 — forkop tabs beyond the first
+- Tabbed app views rendered flat inside `.cbi-map-tabbed` (Forkop) now stay visible after switching tabs: bootstrap's `cascade.css` collapses every `[data-tab-title]` panel (`height:0;opacity:0;overflow:hidden`) and only re-opens the one carrying `[data-tab-active="true"]`, but tab switching on these maps moved only the `li` classes and `hidden` flags, so every tab after the first rendered as an empty 32 px sliver. `syncTabbedSections()` now mirrors `data-tab-active` onto the active section (and clears it from the rest), letting the stock un-collapse rule apply; the no-active-tab fallback still shows every section.
+
 ## 2.1.6 — themed scroll pills inside modals
 - Tab strips inside LuCI modals (Device/Interface Configuration in the wireless and interface editors) get the same themed horizontal-scroll pill as the rest of the UI: the body-wide scanner now covers #modal_overlay, and the pill styles apply there; a strip with a pill drops its own bottom margin so the spacing stays tight.
 

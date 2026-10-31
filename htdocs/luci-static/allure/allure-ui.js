@@ -37,7 +37,12 @@
   /* Some app views render every tab section flat inside .cbi-map-tabbed and
      only hide the inner content, leaving empty bordered shells stacked above
      the active tab. Hide each inactive data-tab section outright; the active
-     one stays exactly as the app rendered it. */
+     one stays exactly as the app rendered it.
+     Bootstrap's cascade.css collapses every [data-tab-title] panel
+     (height:0;opacity:0;overflow:hidden) and only re-opens the one carrying
+     [data-tab-active="true"]. Tab switching on these flat maps moves the
+     li classes but never moves that attribute, so every tab after the first
+     stays invisible. Mirror the attribute onto the active section here. */
   function syncTabbedSections() {
     var root = document.getElementById('maincontent');
     if (!root) return;
@@ -51,7 +56,13 @@
       var active = menu.querySelector('li.cbi-tab[data-tab]');
       var name = active ? active.getAttribute('data-tab') : null;
       body.querySelectorAll(':scope > .cbi-section[data-tab]').forEach(function(sec) {
-        sec.hidden = !!name && sec.getAttribute('data-tab') !== name;
+        var isActive = !!name && sec.getAttribute('data-tab') === name;
+        sec.hidden = !!name && !isActive;
+        if (!sec.hasAttribute('data-tab-title')) return;
+        /* No named active tab keeps the old show-everything behavior, so the
+           attribute has to go on every section or bootstrap would collapse them. */
+        if (isActive || !name) sec.setAttribute('data-tab-active', 'true');
+        else sec.removeAttribute('data-tab-active');
       });
     });
   }

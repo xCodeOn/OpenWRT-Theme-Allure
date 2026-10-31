@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: "Tag to upload packages to (e.g. v1.0.0). Leave empty to only upload artifacts."
+        description: "Tag to upload packages to (e.g. v2.1.7). Leave empty to only upload artifacts."
         required: false
         default: ""
   push:
@@ -17,22 +17,41 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # apk-based OpenWrt (25.12+): current packages for modern devices.
+          - format: apk
+            owrt: "25.12.5"
+            pinned: true
+          # opkg-based OpenWrt: resolve the newest 24.10.x release dynamically.
+          - format: ipk
+            owrt: "24.10"
+            pinned: false
+    name: build-${{ matrix.format }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Resolve OpenWrt SDK
         id: sdk
-        env:
-          OWRT_VER: "25.12.5"
-          TARGET: "x86"
-          SUBTARGET: "64"
         run: |
-          base="https://downloads.openwrt.org/releases/${OWRT_VER}/targets/${TARGET}/${SUBTARGET}"
+          if [ "${{ matrix.pinned }}" = "true" ]; then
+            ver="${{ matrix.owrt }}"
+          else
+            ver=$(curl -fsSL https://downloads.openwrt.org/releases/ | grep -oE '${{ matrix.owrt }}\.[0-9]+' | sort -uV | tail -n1)
+            if [ -z "$ver" ]; then
+              echo "No ${{ matrix.owrt }}.x release found" >&2
+              exit 1
+            fi
+          fi
+          base="https://downloads.openwrt.org/releases/${ver}/targets/x86/64"
           file=$(curl -fsSL "$base/" | grep -oE 'openwrt-sdk-[^"]+\.tar\.(xz|zst)' | head -n1)
           if [ -z "$file" ]; then
             echo "SDK archive not found in $base" >&2
             exit 1
           fi
+          echo "ver=$ver" >> "$GITHUB_OUTPUT"
           echo "url=$base/$file" >> "$GITHUB_OUTPUT"
           echo "file=$file" >> "$GITHUB_OUTPUT"
 
@@ -46,7 +65,7 @@ jobs:
               sudo apt-get update -qq
               sudo apt-get install -y -qq zstd >/dev/null
               curl -fsSL -o sdk.tar.zst "$url"
-              unzstd sdk.tar.zst
+              unzstd -q sdk.tar.zst
               mv sdk.tar.zst sdk.tar
               tar xf sdk.tar
               ;;
@@ -77,6 +96,9 @@ jobs:
           chmod 755 "$PKG/files/etc/uci-defaults/99_allure"
 
           cp "$SRC/ci/luci-theme-allure/Makefile" "$PKG/Makefile"
+          # The package version always follows the repo VERSION file.
+          VER=$(cat "$SRC/VERSION")
+          sed -i "s/^PKG_VERSION:=.*/PKG_VERSION:=$VER/" "$PKG/Makefile"
 
       - name: Configure and build package
         run: |
@@ -90,24 +112,59 @@ jobs:
       - name: Collect packages
         run: |
           mkdir -p dist
-          find "$HOME/sdk/bin" -name 'luci-theme-allure*.ipk' -exec cp {} dist/ \; 2>/dev/null || true
-          find "$HOME/sdk/bin" -name 'luci-theme-allure*.apk' -exec cp {} dist/ \; 2>/dev/null || true
+          find "$HOME/sdk/bin" -name "luci-theme-allure*.${{ matrix.format }}" -exec cp {} dist/ \;
           ls -la dist/ || true
           if [ -z "$(ls -A dist)" ]; then
-            echo "No packages produced!" >&2
+            echo "No ${{ matrix.format }} package produced!" >&2
             exit 1
           fi
 
-      - name: Upload artifacts
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: luci-theme-allure-packages
-          path: dist/
+          name: luci-theme-allure-${{ matrix.format }}
+          path: dist/*
           if-no-files-found: error
 
-      - name: Attach to release (dispatch with release_tag)
-        if: github.event_name == 'workflow_dispatch' && inputs.release_tag != ''
+  release:
+    needs: [build]
+    if: >-
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+      (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download built packages
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Attach packages to release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ inputs.release_tag }}" dist/* --clobber
+          set -e
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TAG="${GITHUB_REF_NAME}"
+          else
+            TAG="${{ inputs.release_tag }}"
+          fi
+          VER="${TAG#v}"
+          ls -la dist/
+
+          BODY=$(awk -v v="$VER" 'index($0, "## " v " ")==1 {f=1; next} /^## / {f=0} f {print}' CHANGELOG.md)
+          if [ -z "$BODY" ]; then
+            BODY="Allure LuCI theme $VER — packages for OpenWrt: .apk (25.12+, apk packaging) and .ipk (24.10.x, opkg), both arch-all."
+          fi
+
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" dist/* \
+              --title "$TAG — Allure LuCI theme" \
+              --notes "$BODY" \
+              --repo "$GITHUB_REPOSITORY"
+          fi
+          echo "Release $TAG now contains:" && gh release view "$TAG" --json assets -q '.assets[].name'
