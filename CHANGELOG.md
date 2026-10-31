@@ -1,5 +1,30 @@
 # Allure Changelog
 
+## 2.1.6 — themed scroll pills inside modals
+- Tab strips inside LuCI modals (Device/Interface Configuration in the wireless and interface editors) get the same themed horizontal-scroll pill as the rest of the UI: the body-wide scanner now covers #modal_overlay, and the pill styles apply there; a strip with a pill drops its own bottom margin so the spacing stays tight.
+
+## 2.1.5 — modal rework
+- Edit modals (wireless / interfaces) rebuilt: the modal is now the single card — nested sections are flattened (no more card-inside-card), every field fills the line (text inputs, selects, cbi-dropdowns), rows are separated by hairlines, and the wireless status badge is a full-width soft card with the signal row above the details instead of a misaligned dark tower overflowing the frame.
+
+## 2.1.4 — modals & table action cells
+- LuCI modals (edit interface / wireless network) finally wear the theme: the modal chrome mirrors the content card styles on small screens — stacked left-aligned rows, section cards, pill tab strips that scroll instead of wrapping, inline help "?" icons and a readable two-row wireless status badge. Previously the modal fell back to raw cascade layout (right-aligned labels, wrapped tabs, cramped status tower).
+- Table scroll indicators no longer float above buttons: the sticky viewport-bottom pill is replaced by an in-flow indicator that sits between the table and whatever follows it.
+- Table action clusters (Startup "Enabled/Start/Restart/Reload/Stop", Mounts) size their column to the content (`min-width:max-content`) instead of overflowing leftwards onto the row label; the scrollable table absorbs the width.
+
+## 2.1.3 — tab overlap fix
+- Long tab labels no longer overlap neighbouring tabs: the LuCI `li { max-width:48% }` cap is reset, so each tab sizes to its label and the strip scrolls horizontally instead.
+
+## 2.1.2 — title button spacing
+- Title-bar action buttons (e.g. "Refresh Channels" on Channel Analysis) get a flex row with an 8 px gap and 4/6 px margins, so they no longer sit flush against the content edges; left edge aligns with the tab strip below.
+
+## 2.1.1 — alignment polish
+- Tab-strip buttons no longer ride below the strip: the LuCI `li { height:25px }` baseline is reset, so labels sit vertically centered.
+- The themed horizontal-scroll indicator sits tight under the tab buttons (the strip's bottom margin collapses while it is shown) instead of floating 19 px below.
+- Table icon buttons (edit / trash / drag handle) center their glyph exactly: the mask icon is absolutely centered inside the 34 px square, immune to the invisible label text node that used to pull it 3 px left; text-glyph drag handles are sized 34×34 and baseline-corrected.
+- "Reset" spans the full action row width on mobile again (the 42 % flex-basis override no longer beats its 100 % rule).
+- Routing-rule cards sit inside the table frame with an even 6 px inset on all sides.
+- Section-title label buttons (e.g. the "Hide" toggles on the Overview page) match the theme pill style regardless of the `.cbi-title` wrapper: rectangular 8 px radius, real padding, no inherited 36 px line-height, and a 3/6 px margin keeps them off the block edges.
+
 ## 2.0.6 — themed scroll indicators
 - Tables that overflow horizontally on mobile now show an always-visible themed scroll pill (gradient thumb on a soft track) that tracks the scroll position; the plain native scrollbar inside tables is hidden.
 - Indicators appear/disappear automatically as content changes and are removed on desktop widths.

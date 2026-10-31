@@ -49,6 +49,8 @@ body.allure .allure-content :is(.cbi-section,.cbi-section-node,.cbi-tabcontainer
 body.allure .allure-content :is(.cbi-section,.cbi-section-node,.cbi-tabcontainer) > .cbi-value > .cbi-value-title {flex:0 0 196px;min-width:0;width:auto;float:none;text-align:start;padding:9px 0 0;line-height:1.4;font-size:12.5px;font-weight:650;color:var(--v-text)}
 body.allure .allure-content :is(.cbi-section,.cbi-section-node,.cbi-tabcontainer) > .cbi-value > .cbi-value-field {flex:1 1 260px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0;max-width:100%;width:auto;padding:0;margin:0}
 body.allure .allure-content .cbi-value-field>.cbi-value-description {flex:1 1 100%;margin:2px 0 0;}
+ /* Keep the cascade help "?" inline before the text instead of hanging across the card frame. */
+body.allure .allure-content :is(.cbi-value-description,.cbi-map-descr,.cbi-section-descr,.cbi-tab-descr):not(:empty)::before {position:static;display:inline-block;vertical-align:-0.15em;left:auto;margin-right:4px}
 /* Native inputs (not checkboxes, file uploads, ranges, buttons, hidden). */
 body.allure .allure-content :is(input[type="text"],input[type="password"],input[type="email"],input[type="number"],input[type="search"],input[type="url"],input[type="time"],input[type="date"],input:not([type]),textarea,select) {box-sizing:border-box;max-width:100%;min-width:0;min-height:var(--al-field-height);border:1px solid var(--v-line);border-radius:var(--al-r-sm);background:var(--al-input);color:var(--v-text);font:inherit;font-size:13px;line-height:1.35;padding:9px 12px;box-shadow:none}
 body.allure .allure-content :is(textarea) {resize:vertical;min-height:86px;overflow-wrap:anywhere}
@@ -61,7 +63,7 @@ body.allure .allure-content .cbi-dropdown {max-width:100%;border:1px solid var(-
 body.allure .allure-content .cbi-dropdown>ul.dropdown {background:var(--v-panel);border:1px solid var(--v-line);box-shadow:var(--al-shadow);z-index:200}
 /* Tab strips: special .cbi-tabmenu, and common application navs; no generic [role=tablist]. */
 body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.forkop-app-tabs) {display:flex;gap:5px;align-items:center;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;-webkit-overflow-scrolling:touch;min-height:45px;max-width:100%;width:100%;padding:5px;margin:0 0 14px;border:1px solid var(--v-line);border-radius:13px;background:var(--v-surface)}
-body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.forkop-app-tabs) > li {display:flex;align-items:stretch;flex:0 0 auto;min-width:0;height:auto;min-height:0;margin:0;padding:0;border:0;background:none}
+body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.forkop-app-tabs) > li {display:flex;align-items:stretch;flex:0 0 auto;min-width:0;max-width:none;height:auto;min-height:0;margin:0;padding:0;border:0;background:none}
 body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.forkop-app-tabs) > li > a,
 body.allure .allure-content :is(.tabs,.nav-tabs,.forkop-app-tabs) > a {display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;min-height:34px;padding:7px 13px;margin:0;white-space:nowrap;border:0;border-radius:9px;background:none;color:var(--v-secondary);font-size:12.5px;font-weight:640;line-height:1.3;text-decoration:none;box-shadow:none}
 body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.forkop-app-tabs) > li.cbi-tab > a,
@@ -106,16 +108,19 @@ body.allure .allure-content table.table :is(td.td,th.th) {text-align:left}
 body.allure .allure-content table.table :is(td.td,th.th).center {text-align:center}
 body.allure .allure-content table.table :is(td.td,th.th).right {text-align:right}
 /* Progress bars (memory, storage, load): thick pill with the value centered inside. */
-body.allure .allure-content .cbi-progressbar {position:relative;height:21px;min-width:220px;border-radius:999px;overflow:hidden;background:var(--al-input);border:1px solid var(--v-line);font-size:0;line-height:0}
+body.allure .allure-content .cbi-progressbar {position:relative;height:21px;min-width:220px;border-radius:999px;overflow:hidden;background:var(--al-input);border:1px solid var(--v-line);font-size:0;line-height:0;container-type:inline-size}
 body.allure .allure-content .cbi-progressbar > div {position:absolute;top:0;left:0;bottom:0;height:100%;background:linear-gradient(90deg,#748cff,#af91f7);border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
-body.allure .allure-content .cbi-progressbar::before {content:attr(title);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 12px;font-size:11px;line-height:1;font-weight:680;letter-spacing:.2px;color:var(--v-text);text-shadow:0 1px 2px rgba(8,10,22,.45);z-index:1;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.allure .allure-content .cbi-progressbar::before {content:attr(title);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 12px;font-size:11px;line-height:1;font-weight:680;letter-spacing:.2px;color:var(--v-text);text-shadow:0 1px 2px rgba(8,10,22,.45);z-index:1;font-style:normal;white-space:pre;width:max-content;margin:auto;animation:allure-marquee 9s ease-in-out infinite alternate}
+ /* Overflowing progress-bar text slides back and forth; short text stays centered (auto margins) and static (min() clamps to 0). */
+@keyframes allure-marquee {0%,15% {transform:translateX(0)} 85%,100% {transform:translateX(min(0px, calc(-100% + 100cqw)))}}
 :root[data-darkmode="false"] body.allure .allure-content .cbi-progressbar::before {color:var(--v-text);text-shadow:none}
 /* Section title row: flex so the Hide/Active indicator chip sits with breathing room. */
 body.allure .allure-content .cbi-section > h3:first-child,
 body.allure .allure-content .cbi-section > h4:first-child {display:flex;align-items:center;gap:12px}
-body.allure .allure-content .cbi-section > :is(h3,h4) > .label {margin-left:auto;min-width:0;padding:5px 13px;border-radius:999px;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:780;border:1px solid var(--v-line);background:var(--v-surface);color:var(--v-secondary);cursor:default;transition:color .17s,border-color .17s,background .17s}
-body.allure .allure-content .cbi-section > :is(h3,h4) > .label[data-clickable="true"] {cursor:pointer}
-body.allure .allure-content .cbi-section > :is(h3,h4) > .label[data-clickable="true"]:hover {color:var(--v-accent);border-color:var(--v-accent);background:var(--v-accent-soft)}
+body.allure .allure-content .cbi-section :is(h3,h4) > .label {margin:3px 6px 3px auto;min-width:0;line-height:1.3;padding:5px 13px;border-radius:8px;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:780;border:1px solid var(--v-line);background:var(--v-surface);color:var(--v-secondary);cursor:default;transition:color .17s,border-color .17s,background .17s}
+body.allure .allure-content .cbi-section :is(h3,h4) > .label[data-clickable="true"] {cursor:pointer}
+body.allure .allure-content .cbi-section :is(h3,h4) > .label[data-clickable="true"]:hover {color:var(--v-accent);border-color:var(--v-accent);background:var(--v-accent-soft)}
+body.allure .allure-content .cbi-title-buttons {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 6px 2px 0}
 /* Native dropdowns in theme style: custom chevron, themed frame, dark popup via color-scheme. */
 body.allure .allure-content select:not([multiple]):not([size]) {appearance:none;-webkit-appearance:none;padding-right:34px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1.5 1.75 6 6.25l4.5-4.5' fill='none' stroke='%238a92a8' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
 /* Modals: themed panel over a blurred scrim. */
@@ -153,14 +158,16 @@ body.allure .allure-content :is(button,input,select,textarea,a):focus-visible {o
  body.allure .allure-content .cbi-page-actions :is(button,.cbi-button,.btn) {min-height:39px;flex:1 1 auto}
  body.allure .allure-content .table:not([data-allure-fixed]):not(.allure-noscroll) {display:block;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
  body.allure .allure-content .table > .tr {min-width:575px;max-width:none}
- body.allure .allure-content .table > .tr > .td.cbi-section-actions {min-width:165px}
+ body.allure .allure-content .table > .tr > .td.cbi-section-actions {min-width:max-content}
  body.allure .allure-content table:not(.table) {display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
  body.allure .allure-content table:not(.table) :is(td,th) {white-space:nowrap}
- /* Action clusters stay on one line; the scrollable table absorbs the width. */
+ /* Action clusters stay on one line; the scrollable table absorbs the width.
+    min-width:max-content keeps the cell honest about its content, otherwise the
+    nowrap row overflows leftwards onto the row label. */
  body.allure .allure-content table:not(.table) td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) {white-space:nowrap}
- body.allure .allure-content table:not(.table) td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) > :is(div,span,form) {display:flex;flex-wrap:nowrap;align-items:center;gap:8px;white-space:nowrap}
+ body.allure .allure-content table:not(.table) td:last-child:has(:is(.cbi-button,button) + :is(.cbi-button,button)) > :is(div,span,form) {display:flex;flex-wrap:nowrap;align-items:center;gap:8px;white-space:nowrap;min-width:max-content}
  body.allure .allure-content table.table td.cbi-section-actions {white-space:nowrap}
- body.allure .allure-content table.table td.cbi-section-actions > :is(div,span,form) {display:flex;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:8px;white-space:nowrap}
+ body.allure .allure-content table.table td.cbi-section-actions > :is(div,span,form) {display:flex;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:8px;white-space:nowrap;min-width:max-content}
  /* LuCI .controls rows (package manager filters/actions) may not overflow their card. */
  body.allure .allure-content .controls {flex-wrap:wrap;row-gap:8px}
  body.allure .allure-content .controls .control-group {flex-wrap:wrap;max-width:100%}
@@ -237,12 +244,11 @@ body.allure .allure-content :is(button,input,select,textarea,a):focus-visible {o
  /* 7. Tables that overflow horizontally get an always-visible themed scroll pill
        (the native scrollbar is hidden; the pill tracks the scroll position).
        Tab strips get the same indicator inline right under the tabs. */
- body.allure .allure-content .allure-hscroll {scrollbar-width:none}
- body.allure .allure-content .allure-hscroll::-webkit-scrollbar {display:none}
- body.allure .allure-content .allure-scrollbar {position:sticky;bottom:10px;z-index:6;height:5px;margin:9px 2px 1px;border-radius:999px;background:var(--v-surface);border:1px solid var(--v-line);overflow:hidden;box-shadow:0 4px 14px rgba(4,6,16,.35)}
+ body.allure :is(.allure-content,.modal) .allure-hscroll {scrollbar-width:none}
+ body.allure :is(.allure-content,.modal) .allure-hscroll::-webkit-scrollbar {display:none}
+ body.allure :is(.allure-content,.modal) .allure-scrollbar {position:relative;bottom:auto;height:5px;margin:5px 2px 12px;border-radius:999px;background:var(--v-surface);border:1px solid var(--v-line);overflow:hidden;box-shadow:none}
  body.allure .allure-content :is(.cbi-tabmenu,.tabs,.nav-tabs,.forkop-app-tabs).allure-hscroll {margin-bottom:0}
-body.allure .allure-content .allure-scrollbar.allure-scrollbar-inline {position:relative;bottom:auto;margin:5px 2px 12px;box-shadow:none}
- body.allure .allure-content .allure-scrollbar span {position:absolute;top:0;bottom:0;left:0;width:20%;border-radius:999px;background:linear-gradient(90deg,#748cff,#af91f7);box-shadow:0 0 6px rgba(122,124,255,.35)}
+ body.allure :is(.allure-content,.modal) .allure-scrollbar span {position:absolute;top:0;bottom:0;left:0;width:20%;border-radius:999px;background:linear-gradient(90deg,#748cff,#af91f7);box-shadow:0 0 6px rgba(122,124,255,.35)}
  body.allure .allure-content .forkop-app-tabs {margin-bottom:12px}
 }
 @media (max-width:460px) {
@@ -414,3 +420,49 @@ body.allure .allure-content .controls > div { flex: 1 1 270px; min-width: 0; mar
 body.allure .allure-content .controls label { display: block; font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 780; color: var(--v-muted); margin: 0 0 9px; }
 body.allure .allure-content .controls .control-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 body.allure .allure-content .controls .control-group input { flex: 1 1 150px; min-width: 0; }
+
+/* 12. LuCI modals (#modal_overlay) live outside .allure-content, so the content
+   chrome must be mirrored here. The modal itself is the only card: nested
+   sections stay flat, rows are full-width stacked, and every field fills the
+   line so nothing hangs over the modal frame. */
+@media (max-width:700px) {
+ body.allure .modal {padding:16px 14px}
+ /* Flatten nesting: only the top-level sections keep a card; nested ones are plain. */
+ body.allure .modal .cbi-map {display:block;width:100%}
+ body.allure .modal .cbi-map > .cbi-section {background:var(--v-surface);border:1px solid var(--v-line);border-radius:13px;padding:12px;margin:0 0 12px}
+ body.allure .modal .cbi-map > .cbi-section:last-child {margin-bottom:0}
+ body.allure .modal .cbi-section .cbi-section {background:none;border:0;border-radius:0;padding:0;margin:0}
+ body.allure .modal :is(.cbi-section,.cbi-section-node,.cbi-section-node-tabbed) {display:block;width:100%;min-width:0;max-width:100%}
+ body.allure .modal .cbi-section > h3 {margin:0 0 10px;font-size:15px;font-weight:700;color:var(--v-text)}
+ body.allure .modal .cbi-section-node-tabbed > div[data-tab] {display:block}
+ /* Rows: label above a full-width field, hairline between rows. */
+ body.allure .modal .cbi-value {display:block;float:none;width:100%;max-width:100%;padding:10px 0;margin:0;border-bottom:1px solid var(--v-line)}
+ body.allure .modal .cbi-value:last-child {border-bottom:0;padding-bottom:2px}
+ body.allure .modal .cbi-value.hidden {display:none}
+ body.allure .modal .cbi-value-title {display:block;float:none;width:auto;text-align:left;padding:0 0 6px;margin:0;line-height:1.4;font-size:12.5px;font-weight:650;color:var(--v-text)}
+ body.allure .modal .cbi-value-field {display:block;float:none;width:100%;max-width:100%;padding:0;margin:0}
+ body.allure .modal .cbi-value-field > :is(output,div,span,form) {display:block;width:100%;max-width:100%}
+ /* Fields fill the line; inline multi-select rows keep their own layout. */
+ body.allure .modal .cbi-value-field input:is([type="text"],[type="password"],[type="number"]) {width:100%;max-width:100%}
+ body.allure .modal .cbi-value-field select.cbi-input-select {width:100%;max-width:100%}
+ body.allure .modal .cbi-value-field .cbi-dropdown {width:100%;max-width:100%}
+ body.allure .modal .cbi-value-field .cbi-checkbox {display:inline-flex;align-items:center}
+ body.allure .modal .cbi-value-description {font-size:12.5px;line-height:1.63;color:var(--v-secondary);margin:3px 0 0}
+ body.allure .modal :is(.cbi-value-description,.cbi-map-descr,.cbi-section-descr,.cbi-tab-descr):not(:empty)::before {position:static;display:inline-block;vertical-align:-0.15em;left:auto;margin-right:4px}
+ /* Tab strips: one scrollable pill row, never wrapped. */
+ body.allure .modal .cbi-tabmenu {display:flex;gap:5px;align-items:center;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;min-height:45px;max-width:100%;padding:5px;margin:0 0 12px;border:1px solid var(--v-line);border-radius:13px;background:var(--v-surface)}
+ body.allure .modal .cbi-tabmenu > li {display:flex;align-items:stretch;flex:0 0 auto;min-width:0;max-width:none;height:auto;margin:0;padding:0;border:0;background:none}
+ body.allure .modal .cbi-tabmenu > li > a {display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;min-height:34px;padding:7px 13px;white-space:nowrap;border:0;border-radius:9px;background:none;color:var(--v-secondary);font-size:12.5px;font-weight:640;line-height:1.3;text-decoration:none;box-shadow:none}
+ body.allure .modal .cbi-tabmenu > li.cbi-tab > a {background:var(--v-panel);color:var(--v-accent);box-shadow:0 1px 5px #00000009}
+ body.allure .modal .cbi-tabmenu > .cbi-tab-disabled {background:none;color:var(--v-secondary)}
+ body.allure .modal .cbi-tabmenu a:hover {background:var(--v-panel);color:var(--v-text)}
+ body.allure .modal :is(.cbi-tabmenu,.tabs,.nav-tabs,.forkop-app-tabs).allure-hscroll {margin-bottom:0}
+ /* Status badge: full-width soft card, signal row above the details. */
+ body.allure .modal .ifacebadge.large {display:flex;flex-direction:column;align-items:stretch;gap:9px;width:100%;max-width:100%;padding:10px 12px;border:1px solid var(--v-line);border-radius:11px;background:var(--v-surface);margin:0}
+ body.allure .modal .ifacebadge.large > small {display:block;margin:0}
+ body.allure .modal .ifacebadge.large > small .center {display:flex;align-items:center;gap:8px;text-align:left}
+ body.allure .modal .ifacebadge.large > small .center > span {display:block;line-height:1.2}
+ body.allure .modal .ifacebadge.large > span {display:block}
+ body.allure .modal .ifacebadge.large .nowrap {white-space:normal}
+ body.allure .modal .ifacebadge.large strong {color:var(--v-secondary);font-weight:650}
+}

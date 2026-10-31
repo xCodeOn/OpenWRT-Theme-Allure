@@ -120,17 +120,19 @@
 
   function ready(){
     const main=document.getElementById('maincontent');if(!main)return;
+    /* Scan the whole body so LuCI modals (#modal_overlay) get indicators too. */
+    const scanRoot=document.body;
     decorate();
     decorateButtons(main);
-    scanScrollbars(main);
+    scanScrollbars(scanRoot);
     let pending=false;
     const observer=new MutationObserver(function(){
-      if(!pending){pending=true;requestAnimationFrame(function(){pending=false;decorate();decorateButtons(main);scanScrollbars(main);});}
+      if(!pending){pending=true;requestAnimationFrame(function(){pending=false;decorate();decorateButtons(main);scanScrollbars(scanRoot);});}
     });
-    observer.observe(main,{subtree:true,childList:true});
+    observer.observe(scanRoot,{subtree:true,childList:true});
     let rzPending=false;
     window.addEventListener('resize', function(){
-      if(!rzPending){rzPending=true;requestAnimationFrame(function(){rzPending=false;scanScrollbars(main);});}
+      if(!rzPending){rzPending=true;requestAnimationFrame(function(){rzPending=false;scanScrollbars(scanRoot);});}
     }, { passive: true });
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);

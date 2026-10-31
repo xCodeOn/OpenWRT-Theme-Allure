@@ -26,13 +26,13 @@
   
   {% if (dispatched?.css): %}<link rel="stylesheet" href="{{ resource }}/{{ dispatched.css }}">{% endif %}
   {% if (css): %}<style>{{ css }}</style>{% endif %}
-  <link rel="stylesheet" href="{{ media }}/allure-system.css?v=2.1.0">
+  <link rel="stylesheet" href="{{ media }}/allure-system.css?v=2.1.6">
   <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
   <script src="{{ resource }}/cbi.js"></script>
   <script src="{{ media }}/allure-i18n.js?v=1.8.0"></script>
   <script src="{{ media }}/allure-dashboard-core.js?v=1.8.0"></script>
   <script defer src="{{ media }}/allure-ui.js?v=1.8.5"></script>
-  <script defer src="{{ media }}/allure-tab-icons.js?v=2.0.7"></script>
+  <script defer src="{{ media }}/allure-tab-icons.js?v=2.1.6"></script>
   <script defer src="{{ media }}/allure-routing-cards.js?v=2.0.0"></script>
 </head>
 <body class="allure lang_{{ dispatcher.lang }}" data-page="{{ entityencode(join('-', length(ctx.request_path) ? ctx.request_path : ctx.path), true) }}">
