@@ -34,8 +34,8 @@ Soft glass panels · translucent top bar · sidebar navigation · accent charts 
 <p align="center">
   <a href="preview/screenshots/Allure_Dark_Screenshot.png"><img src="preview/screenshots/Allure_Dark_Screenshot.png" width="49%" alt="Dark theme"></a>
   <a href="preview/screenshots/Allure_Light_Screenshot.png"><img src="preview/screenshots/Allure_Light_Screenshot.png" width="49%" alt="Light theme"></a>
-  <a href="preview/screenshots/Allure_Mobile_Screenshot.png"><img src="preview/screenshots/Allure_Mobile_Screenshot.png" width="31%" alt="Mobile adaptive sidebar"></a>
 </p>
+<p align="center"><i>Live Status → Allure Dashboard on OpenWrt 25.12 — real traffic graphs and thermal sensors, dark and light.</i></p>
 
 ## What you get
 
@@ -56,7 +56,7 @@ Soft glass panels · translucent top bar · sidebar navigation · accent charts 
 Wire the theme on an OpenWrt 25.12+ router (apk), e.g. Cudy TR3000:
 
 ```bash
-wget -O /tmp/allure.apk https://github.com/xCodeOn/OpenWRT-Theme-Allure/releases/latest/download/luci-theme-allure-2.0.3-r1.apk
+wget -O /tmp/allure.apk https://github.com/xCodeOn/OpenWRT-Theme-Allure/releases/latest/download/luci-theme-allure-2.1.7-r1.apk
 apk add --allow-untrusted /tmp/allure.apk
 
 uci set luci.main.mediaurlbase='/luci-static/allure'
@@ -80,7 +80,7 @@ Then reload the LuCI page without cache (Ctrl+Shift+R) — open **Status → All
 
 ```sh
 opkg update
-opkg install luci-theme-allure_2.0.3_all.ipk
+opkg install luci-theme-allure_2.1.7-r1_all.ipk
 uci set luci.main.mediaurlbase='/luci-static/allure'
 uci commit luci
 rm -f /tmp/luci-indexcache

@@ -19,4 +19,4 @@ uci commit luci
 /etc/init.d/uhttpd reload
 ```
 
-11 reconstructed pages were browser-tested at 320, 390 and 1440 px (33 combinations). These previews are not screenshots of a live router. Custom third-party applications may need further adjustments. See README_RU.md for details and sources.
+The theme is verified on a live Cudy TR3000 router (OpenWrt 25.12.5): dashboard, Forkop, network, wireless, processes, packages, startup, SSH keys, backups and system settings checked at 320, 390 and 1440 px. Custom third-party applications may need further adjustments.
