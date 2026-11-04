@@ -1,5 +1,9 @@
 # Allure Changelog
 
+## 2.1.8 — mobile tab switching
+- Tab switching is broken on narrow screens again, in a new way: the themed horizontal-scroll indicator is inserted right after overflowing `.cbi-tabmenu` strips (`el.after(ind)`), and LuCI's `switchTab()` locates the pane group via `menu.nextElementSibling` — which now lands on the indicator div instead of the pane container, so `data-tab-active` never moves past the first tab. Every tabbed page (System, Startup, Routing, DNS, …) highlighted the clicked tab but kept showing the first tab's content at widths ≤ 820 px, where the indicator exists. `syncTabMenus()` now mirrors the active tab onto the panes on every li-class mutation, skipping `.allure-scrollbar` siblings when locating the real group; the observer watches the whole body so modal tab strips are covered too.
+- Crossing the 820 px drawer breakpoint closes an open drawer automatically, so a drawer left open on desktop no longer overlaps the content after rotating or resizing to mobile.
+
 ## 2.1.7 — forkop tabs beyond the first
 - Tabbed app views rendered flat inside `.cbi-map-tabbed` (Forkop) now stay visible after switching tabs: bootstrap's `cascade.css` collapses every `[data-tab-title]` panel (`height:0;opacity:0;overflow:hidden`) and only re-opens the one carrying `[data-tab-active="true"]`, but tab switching on these maps moved only the `li` classes and `hidden` flags, so every tab after the first rendered as an empty 32 px sliver. `syncTabbedSections()` now mirrors `data-tab-active` onto the active section (and clears it from the rest), letting the stock un-collapse rule apply; the no-active-tab fallback still shows every section.
 
